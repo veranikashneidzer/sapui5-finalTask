@@ -33,21 +33,20 @@ Your task is to design and develop a functional application that meets the follo
 
 Requirements:
 
-     1. Data Integration:  
-
+1. Data Integration:  
 The application must utilize an oData v2 model for data handling (you can use the same approach with mock-server that we have used before).  
 
-     2. Master-Detail Layout:  
+2. Master-Detail Layout:  
 Implement a master-detail layout ([Example of Master-Detail layout](https://sapui5.hana.ondemand.com/test-resources/sap/m/demokit/orderbrowser/webapp/test/mockServer.html?sap-ui-theme=sap_horizon_dark) ) to display and interact with data.  
 The master page should allow users to filter the displayed data and trigger creation of new record (navigation to object page).  
 
-     3. Object Page Functionality:  
+3. Object Page Functionality:  
 The object page should include:   
 A possibility to go into edit mode to update existing data (edit mode should support save and cancel actions).  
 A delete functionality to remove item.  
 A creation functionality should also navigate and happen on the Object page.  
 
-      4. User Experience:  
+4. User Experience:  
 Ensure the application is intuitive and user-friendly.  
 It should be possible to share the link to the exact object page  
 
