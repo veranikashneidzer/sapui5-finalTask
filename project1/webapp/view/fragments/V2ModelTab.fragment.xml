@@ -1,0 +1,97 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <Table
+        id="productsListV2"
+        width="auto"
+        mode="MultiSelect"
+        selectionChange=".onProductsTableV2SelectedItemsChanged"
+        items="{
+            path: 'DataV2>/Products'
+        }">
+        <headerToolbar>
+            <OverflowToolbar id="otbSubheader">
+                <Title text="{i18n>productsTableHeader}" level="H2" />
+                <ToolbarSpacer />
+                <Button
+                    text="{i18n>buttonDelete}"
+                    class="sapUiTinyMarginEnd"
+                    enabled="{= Boolean(${configModel>/productsSelectedItems}.length)}"
+                    press=".onOpenProductsDeleteConfirmationDialog">
+                </Button>
+                <Button
+                    text="{i18n>buttonAdd}"
+                    press=".onOpenProductV2DataCreateDialog">
+                </Button>
+            </OverflowToolbar>
+        </headerToolbar>
+        <columns>
+            <Column>
+                <Text text="{i18n>columnName}" />
+            </Column>
+            <Column
+                minScreenWidth="Small"
+                demandPopin="true">
+                <Text text="{i18n>columnDescription}" />
+            </Column>
+            <Column
+                minScreenWidth="Small"
+                demandPopin="true">
+                <Text text="{i18n>columnReleaseDate}" />
+            </Column>
+            <Column
+                minScreenWidth="Small"
+                demandPopin="true">
+                <Text text="{i18n>columnDiscontinuedDate}" />
+            </Column>
+            <Column
+                minScreenWidth="Small"
+                demandPopin="true">
+                <Text text="{i18n>columnRating}" />
+            </Column>
+            <Column
+                minScreenWidth="Small"
+                demandPopin="true">
+                <Text text="{i18n>columnPrice}" />
+            </Column>
+            <Column
+                hAlign="End"
+                width="10em"
+                minScreenWidth="Small"
+                demandPopin="true">
+                <Text text="{i18n>columnActions}" />
+            </Column>
+        </columns>
+        <items>
+            <ColumnListItem
+                press=".onProductPress"
+                type="Navigation">
+                <cells>
+                    <ObjectIdentifier 
+                        title="{DataV2>Name}" />
+                    <Text
+                        text="{DataV2>Description}" />
+                    <Text
+                        text="{
+                            path: 'DataV2>ReleaseDate',
+                            type: 'sap.ui.model.odata.type.DateTime'
+                        }" />
+                    <Text
+                        text="{
+                            path: 'DataV2>DiscontinuedDate',
+                            type: 'sap.ui.model.odata.type.DateTime'
+                        }"/>
+                    <Text
+                        text="{DataV2>Rating}"/>
+                    <Text
+                        text="{oDataV2>Price}"/>
+                    <FlexBox justifyContent="End">
+                        <Button 
+                            text="{i18n>buttonEdit}"
+                            press=".onOpenProductV2DataEditDialog"/>
+                    </FlexBox>
+                </cells>
+            </ColumnListItem>
+        </items>
+    </Table>
+</core:FragmentDefinition>

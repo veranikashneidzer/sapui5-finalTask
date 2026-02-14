@@ -1,0 +1,120 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <Table
+        id="booksList"
+        width="auto"
+        mode="MultiSelect"
+        selectionChange=".onBooksTableSelectedItemsChanged"
+        items="{
+            path: 'booksModel>/currentBooks'
+        }">
+        <headerToolbar>
+            <Toolbar>
+                <Button 
+                    text="{i18n>buttonAddRecord}"
+                    class="sapUiTinyMarginEnd"
+                    press=".onOpenBookCreationDialog">
+                </Button>
+                <Button
+                    text="{i18n>buttonDeleteRecord}"
+                    class="sapUiTinyMarginEnd"
+                    enabled="{= Boolean(${booksModel>/booksSelectedItems}.length)}"
+                    press=".onOpenDeletionRecordConfirmationDialog">
+                </Button>
+                <Input
+                    width="50%"
+                    valueLiveUpdate="true"
+                    class="sapUiTinyMarginEnd"
+                    liveChange=".onSetSearchedName"/>
+                <ComboBox
+                    selectedKey="0"
+                    selectionChange=".onSetSelectedGenre"
+                    class="sapUiTinyMarginEnd"
+                    items="{
+                        path: 'booksModel>/genres'
+                    }">
+                    <core:Item key="{booksModel>key}" text="{booksModel>title}" />
+                </ComboBox>
+                <Button text="{i18n>buttonFilter}" press="onFilterTable" />
+            </Toolbar>
+        </headerToolbar>
+        <columns>
+            <Column>
+                <Text text="{i18n>columnName}" />
+            </Column>
+            <Column
+                minScreenWidth="Small"
+                demandPopin="true">
+                <Text text="{i18n>columnAuthor}" />
+            </Column>
+            <Column
+                minScreenWidth="Small"
+                demandPopin="true">
+                <Text text="{i18n>columnGenre}" />
+            </Column>
+            <Column
+                minScreenWidth="Small"
+                demandPopin="true">
+                <Text text="{i18n>columnReleaseDate}" />
+            </Column>
+            <Column
+                minScreenWidth="Small"
+                demandPopin="true">
+                <Text text="{i18n>columnAvailableQuantity}" />
+            </Column>
+            <Column
+                hAlign="End"
+                width="10em"
+                minScreenWidth="Small"
+                demandPopin="true">
+                <Text text="{i18n>columnActions}" />
+            </Column>
+        </columns>
+        <items>
+            <ColumnListItem>
+                <cells>
+                    <FlexBox>
+                        <ObjectIdentifier 
+                            visible="{= !${booksModel>isEditable}}" 
+                            title="{booksModel>Name}"
+                            />
+                        <Input
+                            visible="{booksModel>isEditable}"
+                            value="{booksModel>Name}"
+                            />
+                    </FlexBox>
+                    <Text text="{booksModel>Author}" />
+                    <Text text="{booksModel>Genre/title}" />
+                    <Text
+                        core:require="{
+                            Formatter: 'project1/model/formatter'
+                        }"
+                        text="{i18n>cellPublished}: {
+                                parts: [
+                                    'booksModel>ReleaseDate'
+                                ],
+                                formatter: 'Formatter.formatDate'
+                        }"/>
+                    <ObjectNumber
+                        number="{booksModel>AvailableQuantity}"
+                        emphasized="false"/>
+                    <FlexBox justifyContent="{= !${booksModel>isEditable} ? 'End' : 'SpaceBetween'}">
+                        <Button 
+                            text="{i18n>buttonEdit}"
+                            visible="{= !${booksModel>isEditable}}"
+                            press="onEditTitle"/>
+                        <Button 
+                            text="{i18n>buttonSave}"
+                            visible="{booksModel>isEditable}"
+                            press="onSaveTitle"/>
+                        <Button 
+                            text="{i18n>buttonCancel}"
+                            visible="{booksModel>isEditable}"
+                            press="onCancelUpdateTitle"/>
+                    </FlexBox>
+                </cells>
+            </ColumnListItem>
+        </items>
+    </Table>
+</core:FragmentDefinition>

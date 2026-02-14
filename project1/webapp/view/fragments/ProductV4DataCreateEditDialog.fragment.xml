@@ -1,0 +1,96 @@
+<core:FragmentDefinition
+   xmlns="sap.m"
+   xmlns:core="sap.ui.core" >
+   <Dialog
+        title ="{configModel>/headerText}"
+        class="sapUiResponsivePadding--content sapUiResponsivePadding--header sapUiResponsivePadding--footer sapUiResponsivePadding--subHeader">
+        <content>
+    <FlexBox direction="Column">
+        <Input
+            value="{
+                path: 'DataV4>Name',
+                type: 'sap.ui.model.type.String',
+                constraints: { minLength: 1 }
+            }"
+            required="true" 
+            placeholder="{i18n>productCreationDialogNamePlaceholder}"
+            valueStateText="{i18n>productCreationDialogValidationError}"
+            liveChange=".onCreationDialogControlChange"
+            />
+        <Input
+            value="{
+                path: 'DataV4>Description',
+                type: 'sap.ui.model.type.String',
+                constraints: { minLength: 1 }
+            }"
+            required="true" 
+            placeholder="{i18n>productCreationDialogDescriptionPlaceholder}"
+            valueStateText="{i18n>productCreationDialogValidationError}"
+            liveChange=".onCreationDialogControlChange"
+            />
+        <Input
+            type="Number"
+            value="{
+                path: 'DataV4>Rating',
+                type: 'sap.ui.model.type.Integer'
+            }"
+            required="true" 
+            placeholder="{i18n>productCreationDialogRatingPlaceholder}"
+            valueStateText="{i18n>productCreationDialogValidationError}"
+            liveChange=".onCreationDialogControlChange"
+            />
+        <Input
+            type="Number"
+            value="{
+                path: 'DataV4>Price',
+                type: 'sap.ui.model.type.Integer',
+                constraints: { minimum: 0.1 }
+            }"
+            required="true" 
+            placeholder="{i18n>productCreationDialogPricePlaceholder}"
+            valueStateText="{i18n>productCreationDialogValidationError}"
+            liveChange=".onCreationDialogControlChange"
+            />
+        <DatePicker
+            placeholder="{i18n>productCreationDialogReleaseDatePlaceholder}" 
+            displayFormat="dd-MM-yyyy"
+            valueFormat="yyyy-MM-dd" 
+            value="{
+                path: 'DataV4>ReleaseDate',
+                type: 'sap.ui.model.type.DateTimeOffset'
+            }"
+            required="true" 
+            valueStateText="{i18n>productCreationDialogValidationError}"
+            change=".onCreationDialogControlChange"
+            />
+        <DatePicker
+            placeholder="{i18n>productCreationDialogDiscontinuedDatePlaceholder}" 
+            displayFormat="dd-MM-yyyy" 
+            valueFormat="yyyy-MM-dd" 
+            value="{
+                path: 'DataV4>DiscontinuedDate',
+                type: 'sap.ui.model.type.DateTimeOffset'
+            }"
+            required="true" 
+            valueStateText="{i18n>productCreationDialogValidationError}"
+            change=".onCreationDialogControlChange"
+            />
+    </FlexBox>
+        </content>
+        <footer>
+			<Toolbar>
+				<content>
+                    <ToolbarSpacer />
+                    <Button
+                        text="{configModel>/buttonSubmitText}"
+                        press=".onSubmitV4Product"
+                        />
+                    <Button
+                        text="{i18n>dialogCancelButtonText}"
+                        press=".onCancelProductV4DataChanging"
+                        />
+				</content>
+			</Toolbar>
+		</footer>
+   </Dialog>
+</core:FragmentDefinition>

@@ -13,7 +13,25 @@
     "sourceTemplate": {
       "id": "@sap/generator-fiori:basic",
       "version": "1.20.1",
-      "toolsId": "3ab1ea85-bba8-4e4a-badd-1a7d4f833d53"
+      "toolsId": "4809c35b-1e11-4163-b8a5-2dcfca1e65bf"
+    },
+    "dataSources": {
+      "ODataV2": {
+        "uri": "/V2/OData/OData.svc/",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "2.0",
+          "localUri": "localService/metadataV2.xml"
+        }
+      },
+      "ODataV4": {
+        "uri": "/V4/OData/OData.svc/",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "4.0",
+          "localUri": "localService/metadataV4.xml"
+        }
+      }
     }
   },
   "sap.ui": {
@@ -33,12 +51,14 @@
     }
   },
   "sap.ui5": {
-    "flexEnabled": true,
+    "handleValidation": true,
     "dependencies": {
-      "minUI5Version": "1.144.1",
+      "minUI5Version": "1.144.0",
       "libs": {
         "sap.m": {},
-        "sap.ui.core": {}
+        "sap.ui.core": {},
+        "sap.uxap": {},
+        "sap.ui.layout": {}
       }
     },
     "contentDensities": {
@@ -49,7 +69,25 @@
       "i18n": {
         "type": "sap.ui.model.resource.ResourceModel",
         "settings": {
-          "bundleName": "project1.i18n.i18n"
+          "bundleName": "project1.i18n.i18n",
+          "supportedLocales": [
+            "en"
+          ],
+          "fallbackLocale": ""
+        }
+      },
+      "DataV2": {
+        "type": "sap.ui.model.odata.v2.ODataModel",
+        "dataSource": "ODataV2",
+        "settings": {
+          "defaultBindingMode": "TwoWay"
+        }
+      },
+      "DataV4": {
+        "type": "sap.ui.model.odata.v4.ODataModel",
+        "dataSource": "ODataV4",
+        "settings": {
+          "updateGroupId": "defferedGroup"
         }
       }
     },
@@ -75,16 +113,30 @@
       "routes": [
         {
           "name": "RouteMain",
-          "pattern": ":?query:",
+          "pattern": "",
           "target": [
             "TargetMain"
           ]
+        },
+        {
+          "name": "Tab",
+          "pattern": "tab/{tabKey}",
+          "target": ["TargetMain"]
+        },
+        {
+          "name": "ProductDetailPage",
+          "pattern": "Product/{ProductID}",
+          "target": ["ProductDetailPage"]
         }
       ],
       "targets": {
         "TargetMain": {
           "id": "Main",
           "name": "Main"
+        },
+        "ProductDetailPage": {
+          "id": "Product",
+          "name": "Product"
         }
       }
     },

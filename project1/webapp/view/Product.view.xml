@@ -1,0 +1,130 @@
+<mvc:View
+	controllerName="project1.controller.Product"
+	xmlns="sap.uxap"
+	xmlns:m="sap.m"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:core="sap.ui.core"
+	xmlns:mvc="sap.ui.core.mvc">
+	<ObjectPageLayout id="ObjectPageLayout" upperCaseAnchorBar="false">
+		<headerTitle>
+			<ObjectPageHeader objectTitle="{DataV2>Name}">
+			</ObjectPageHeader>
+		</headerTitle>
+
+		<sections>
+			<ObjectPageSection titleUppercase="false" title="{i18n>tabProductDetails}">
+				<subSections>
+					<ObjectPageSubSection titleUppercase="false">
+						<blocks>
+						<f:SimpleForm
+                            id="productForm"
+                            editable="false"
+                            layout="ResponsiveGridLayout"
+                        >
+							<m:Label
+								text="{i18n>columnName}"/>
+							<m:Text
+								text="{DataV2>Name}"/>
+							<m:Label
+								text="{i18n>columnDescription}"/>
+							<m:Text
+								text="{DataV2>Description}"/>
+							<m:Label
+								text="{i18n>columnRating}"/>
+							<m:RatingIndicator
+								value="{DataV2>Rating}"
+								editable="false"
+								enabled="false"
+								iconSize="16px"
+								maxValue="5"/>
+							<m:Label
+								text="{i18n>columnPrice}"/>
+							<m:ObjectNumber
+								number="{
+									path: 'DataV2>Price',
+									type: 'FloatType',
+									formatOptions: { minIntegerDigits: 2 }
+								}"/>
+							<m:Label
+								text="{i18n>columnReleaseDate}"/>
+							<m:Text
+								text="{
+									path: 'DataV2>ReleaseDate',
+									type: 'sap.ui.model.type.Date',
+									formatOptions: {
+										pattern: 'yyyy-MM-dd'
+									}
+								}"/>
+							<m:Label
+								text="{i18n>columnDiscontinuedDate}"/>
+							<m:Text
+								text="{
+									path: 'DataV2>DiscontinuedDate',
+									type: 'sap.ui.model.type.Date',
+									formatOptions: {
+										pattern: 'yyyy-MM-dd'
+									}
+								}"/>
+                        </f:SimpleForm>
+						</blocks>
+					</ObjectPageSubSection>
+				</subSections>
+			</ObjectPageSection>
+
+			<ObjectPageSection titleUppercase="false" title="{i18n>tabProductSupplier}">
+				<subSections>
+					<ObjectPageSubSection titleUppercase="false">
+												<blocks>
+						<f:SimpleForm
+                            id="supplierForm"
+                            editable="false"
+                            layout="ResponsiveGridLayout"
+							labelSpanXL="4"
+							labelSpanL="3"
+							labelSpanM="4"
+							labelSpanS="12"
+							adjustLabelSpan="false"
+							emptySpanXL="0"
+							emptySpanL="4"
+							emptySpanM="0"
+							emptySpanS="0"
+							columnsXL="2"
+							columnsL="1"
+							columnsM="1"
+							singleContainerFullSize="false"
+                        >
+							<m:Label
+								text="{i18n>columnName}"/>
+							<m:Text
+								text="{DataV2>Supplier/Name}"/>
+							<core:Title text="Address" />
+							<m:Label
+								text="{i18n>columnStreet}"/>
+							<m:Text
+								text="{DataV2>Supplier/Address/Street}"/>
+							<m:Label
+								text="{i18n>columnCity}"/>
+							<m:Text
+								text="{DataV2>Supplier/Address/City}"/>
+							<m:Label
+								text="{i18n>columnState}"/>
+							<m:Text
+								text="{DataV2>Supplier/Address/State}"/>
+							<m:Label
+								text="{i18n>columnZipCode}"/>
+							<m:Text
+								text="{DataV2>Supplier/Address/ZipCode}"/>
+							<m:Label
+								text="{i18n>columnCountry}"/>
+							<m:Text
+								text="{DataV2>Supplier/Address/Country}"/>
+                        </f:SimpleForm>
+						</blocks>
+					</ObjectPageSubSection>
+				</subSections>
+			</ObjectPageSection>
+
+		</sections>
+
+	</ObjectPageLayout>
+</mvc:View>

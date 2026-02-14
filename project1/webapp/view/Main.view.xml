@@ -1,6 +1,22 @@
 <mvc:View controllerName="project1.controller.Main"
     xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
     xmlns="sap.m">
-    <Page id="page" title="{i18n>title}">
+    <Page id="page" title="{i18n>booksListTitle}">
+        <IconTabBar
+            id="tabBarNavigation"
+            select=".onSelectTab">
+		    <items>
+                <IconTabFilter text="{i18n>tabJSONModel}" key="jsonTab">
+                    <core:Fragment fragmentName="project1.view.fragments.JSONModelTab"/>
+                </IconTabFilter>
+                <IconTabFilter text="{i18n>tabV2Model}" key="v2Tab">
+                    <core:Fragment fragmentName="project1.view.fragments.V2ModelTab"/>
+                </IconTabFilter>
+                <IconTabFilter text="{i18n>tabV4Model}" key="v4Tab">
+                    <core:Fragment fragmentName="project1.view.fragments.V4ModelTab"/>
+                </IconTabFilter>
+            </items>
+        </IconTabBar>
     </Page>
 </mvc:View>
