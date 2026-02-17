@@ -7,37 +7,20 @@ sap.ui.define([
 
   return BaseController.extend("project1.controller.Main", Object.assign({}, ODataV2ModelTab, {
     onInit() {
-      this.configModel = new JSONModel({
-        productsSelectedItems: [],
-        isNewProductValid: false,
-        buttonSubmitText: '',
-      });
-
-      this.getView().setModel(this.configModel, "configModel");
       this.configModel = this.getConfigModel();
       this.oDataV2Model = this.getOwnerComponent().getModel("DataV2");
       this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
+
+      this.configModel = new JSONModel({
+        ordersCounter: this.oDataV2Model.getProperty("/Orders")?.length || 0,
+      });
+
+      this.getView().setModel(this.configModel, "configModel");
     },
 
-    onCreationDialogControlChange(oEvent) {
-      const oControl = oEvent.getSource();
-
-      this._validateControl(oControl);
-    },
-
-    _validateControl(oControl) {
-      let isValid = false;
-
-      if (oControl.isA("sap.m.Input")) {
-        const inputValue = oControl.getValue();
-        isValid = oControl.getType() === "Number" ? Number(inputValue) && inputValue > 0 : !!(`${inputValue}`.length);
-      } else if (oControl.isA("sap.m.DatePicker")) {
-        isValid = oControl.isValidValue() && !!oControl.getValue().length;
-      }
-
-      oControl.setValueState(isValid ? "None" : "Error");
-
-      return isValid;
-    },
+    onOrdersListUpdateFinished() {
+      const ordersCount = this.byId("listOfOrders").getItems().length;
+      this.configModel.setProperty("/ordersCounter", ordersCount);
+    }
   }))
 });

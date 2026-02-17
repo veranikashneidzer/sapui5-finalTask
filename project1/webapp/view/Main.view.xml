@@ -2,15 +2,40 @@
     xmlns:mvc="sap.ui.core.mvc"
 	xmlns:core="sap.ui.core"
     xmlns="sap.m">
-    <Page id="page" title="Orders">
-		    <List
-				id="listOfOrders"
-				width="auto"
-				items="{DataV2>/Orders}">
-				<items>
-					<ObjectListItem title="{DataV2>OrderID}">
-					</ObjectListItem>
-				</items>
-			</List>
+    <Page 
+		id="page"
+		title="{= ${i18n>orders} + ' (' + ${configModel>/ordersCounter} + ')' }">
+		<List
+			id="listOfOrders"
+			width="auto"
+			items="{
+				path: 'DataV2>/Orders',
+				parameters: {expand: 'Customer'},
+				sorter: {
+					path: 'DataV2>OrderID',
+					descending: true
+				}
+			}"
+			updateFinished="onOrdersListUpdateFinished">
+			<items>
+				<ObjectListItem
+					title="{DataV2>OrderID}"
+					type="Active"
+					number="87.50"
+					numberUnit="EUR">
+					<firstStatus>
+						<ObjectStatus
+							text="Available"
+							state="Success" />
+					</firstStatus>
+					<ObjectAttribute text="{DataV2>/CompanyName}" />
+					<ObjectAttribute text="145 x 140 x 360 cm" />
+					<markers>
+						<ObjectMarker type="Favorite" />
+						<ObjectMarker type="Flagged" />
+					</markers>
+				</ObjectListItem>
+			</items>
+		</List>
     </Page>
 </mvc:View>
