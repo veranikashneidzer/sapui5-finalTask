@@ -35,6 +35,52 @@
 						<ObjectMarker type="Flagged" />
 					</markers>
 				</ObjectListItem>
+				<ObjectListItem
+						title="{= ${i18n>order} + ' (' + ${DataV2>OrderID} + ')' }"
+						number="{
+							path: 'DataV2>OrderDate',
+							type: 'sap.ui.model.type.Date',
+							formatOptions: {
+								style: 'short',
+								pattern: 'dd/MM/yyyy'
+							}
+						}">
+						<firstStatus>
+							<ObjectStatus
+								core:require="{
+									Formatter: 'project1/model/formatter'
+								}"
+								state="{
+									parts: [
+										{path: 'DataV2>RequiredDate'},
+										{path: 'DataV2>ShippedDate'},
+										{path: 'DataV2>OrderID'}
+									],
+									formatter:'Formatter.getDeliveryState'
+								}"
+								text="{
+									parts: [
+										{path: 'DataV2>RequiredDate'},
+										{path: 'DataV2>ShippedDate'}
+									],
+									formatter:'Formatter.getDeliveryText.bind($controller)'
+								}"/>
+
+						</firstStatus>
+						<attributes>
+							<ObjectAttribute text="{DataV2>CustomerName}" />
+							<ObjectAttribute
+								title="{i18n>shipped}"
+								text="{
+									path: 'DataV2>ShippedDate',
+									type: 'sap.ui.model.type.Date',
+									formatOptions: {
+										style: 'medium',
+										pattern: 'dd MMM yyyy'
+									}
+								}" />
+						</attributes>
+					</ObjectListItem>
 			</items>
 		</List>
     </Page>
