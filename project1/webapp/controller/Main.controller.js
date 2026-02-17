@@ -2,7 +2,9 @@ sap.ui.define([
   "project1/controller/BaseController",
   "sap/ui/model/json/JSONModel",
   "./parts/ODataV2ModelTab",
-], (BaseController, JSONModel, ODataV2ModelTab) => {
+  "sap/ui/model/Filter",
+  "sap/ui/model/FilterOperator",
+], (BaseController, JSONModel, ODataV2ModelTab, Filter, FilterOperator) => {
   "use strict";
 
   return BaseController.extend("project1.controller.Main", Object.assign({}, ODataV2ModelTab, {
@@ -21,6 +23,16 @@ sap.ui.define([
     onOrdersListUpdateFinished() {
       const ordersCount = this.byId("listOfOrders").getItems().length;
       this.configModel.setProperty("/ordersCounter", ordersCount);
-    }
+    },
+
+    onSearchOrders(oEvent) {
+      const sQuery = oEvent.getSource().getValue();
+      const oBinding = this.byId("listOfOrders").getBinding("items");
+      const aFilters = sQuery ? [
+        new Filter("OrderID", FilterOperator.Contains, sQuery)
+      ] : [];
+
+      oBinding.filter(aFilters);
+    },
   }))
 });

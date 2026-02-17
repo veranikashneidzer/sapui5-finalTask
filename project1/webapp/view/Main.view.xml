@@ -2,9 +2,10 @@
     xmlns:mvc="sap.ui.core.mvc"
 	xmlns:core="sap.ui.core"
     xmlns="sap.m">
-    <Page 
-		id="page"
-		title="{= ${i18n>orders} + ' (' + ${configModel>/ordersCounter} + ')' }">
+    <Page id="page">
+		<Title
+			text="{= ${i18n>orders} + ' (' + ${configModel>/ordersCounter} + ')' }"
+			level="H2"/>
 		<List
 			id="listOfOrders"
 			width="auto"
@@ -17,6 +18,43 @@
 				}
 			}"
 			updateFinished="onOrdersListUpdateFinished">
+			<headerToolbar>
+				<OverflowToolbar>
+					<SearchField
+						showRefreshButton="true"
+						tooltip="{i18n>search}"
+						width="100%"
+						search=".onSearchOrders">
+						<layoutData>
+							<OverflowToolbarLayoutData
+								minWidth="150px"
+								maxWidth="240px"
+								shrinkable="true"
+								priority="NeverOverflow"/>
+						</layoutData>
+					</SearchField>
+					<ToolbarSpacer />
+					<!-- <ComboBox
+						selectedKey="0"
+						selectionChange=".onSetSelectedGenre"
+						class="sapUiTinyMarginEnd"
+						items="{
+							path: 'booksModel>/genres'
+						}">
+						<core:Item key="{booksModel>key}" text="{booksModel>title}" />
+					</ComboBox>
+					<Button
+						text="{i18n>buttonDelete}"
+						class="sapUiTinyMarginEnd"
+						enabled="{= Boolean(${configModel>/productsSelectedItems}.length)}"
+						press=".onOpenProductsDeleteConfirmationDialog">
+					</Button>
+					<Button
+						text="{i18n>buttonAdd}"
+						press=".onOpenProductV2DataCreateDialog">
+					</Button> -->
+				</OverflowToolbar>
+			</headerToolbar>
 			<items>
 				<ObjectListItem
 					title="{DataV2>OrderID}"
@@ -36,7 +74,7 @@
 					</markers>
 				</ObjectListItem>
 				<ObjectListItem
-						title="{= ${i18n>order} + ' (' + ${DataV2>OrderID} + ')' }"
+						title="{= ${i18n>order} + ' ' + ${DataV2>OrderID} }"
 						number="{
 							path: 'DataV2>OrderDate',
 							type: 'sap.ui.model.type.Date',
