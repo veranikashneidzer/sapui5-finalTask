@@ -135,10 +135,5 @@ sap.ui.define([
 
       return isAllControlsValid;
     },
-
-    onProductPress(oEvent) {
-      const sProductId = oEvent.getSource().getBindingContext("DataV2").getObject()?.["ID"];
-      this.oRouter.navTo("ProductDetailPage", { ProductID: sProductId });
-    }
   });
 });

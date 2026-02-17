@@ -23,14 +23,6 @@
           "odataVersion": "2.0",
           "localUri": "localService/metadataV2.xml"
         }
-      },
-      "ODataV4": {
-        "uri": "/V4/OData/OData.svc/",
-        "type": "OData",
-        "settings": {
-          "odataVersion": "4.0",
-          "localUri": "localService/metadataV4.xml"
-        }
       }
     }
   },
@@ -81,13 +73,6 @@
         "dataSource": "ODataV2",
         "settings": {
           "defaultBindingMode": "TwoWay"
-        }
-      },
-      "DataV4": {
-        "type": "sap.ui.model.odata.v4.ODataModel",
-        "dataSource": "ODataV4",
-        "settings": {
-          "updateGroupId": "defferedGroup"
         }
       }
     },
