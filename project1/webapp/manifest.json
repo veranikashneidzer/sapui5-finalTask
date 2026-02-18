@@ -44,12 +44,6 @@
   },
   "sap.ui5": {
     "handleValidation": true,
-    "rootView": {
-			"viewName": "project1.view.App",
-			"type": "XML",
-			"async": false,
-			"id": "project1"
-		},
     "dependencies": {
       "minUI5Version": "1.144.0",
       "libs": {

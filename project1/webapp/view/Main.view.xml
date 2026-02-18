@@ -61,7 +61,7 @@
 									pattern: 'dd/MM/yyyy'
 								}
 							}"
-							type="Active"
+							type="Navigation"
 							key="{DataV2>OrderID}"
 							press=".onSelectOrder">
 							<firstStatus>

@@ -136,7 +136,6 @@ sap.ui.define([
       const bIsSelected = oEvent.getParameter("selected");
 
       if (!(oItem.getMode() === "MultiSelect" && !bIsSelected)) {
-        const oItem = oEvent.getParameter("listItem") || oEvent.getSource();
         const nListOrderId = oEvent.getSource().getId().split("-").pop();
         const bIsReplace = !Device.system.phone;
         
