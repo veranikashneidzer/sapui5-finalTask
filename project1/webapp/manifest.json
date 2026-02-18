@@ -44,9 +44,16 @@
   },
   "sap.ui5": {
     "handleValidation": true,
+    "rootView": {
+			"viewName": "project1.view.App",
+			"type": "XML",
+			"async": false,
+			"id": "project1"
+		},
     "dependencies": {
       "minUI5Version": "1.144.0",
       "libs": {
+        "sap.f": {},
         "sap.m": {},
         "sap.ui.core": {},
         "sap.uxap": {},
@@ -85,44 +92,44 @@
     },
     "routing": {
       "config": {
-        "routerClass": "sap.m.routing.Router",
-        "controlAggregation": "pages",
-        "controlId": "app",
-        "transition": "slide",
-        "type": "View",
-        "viewType": "XML",
-        "path": "project1.view",
-        "async": true,
-        "viewPath": "project1.view"
-      },
+				"routerClass": "sap.f.routing.Router",
+				"type": "View",
+				"viewType": "XML",
+				"path": "project1.view",
+				"controlId": "layout",
+				"controlAggregation": "beginColumnPages",
+				"bypassed": {
+					"target": "notFound"
+				},
+				"async": true
+			},
       "routes": [
-        {
-          "name": "RouteMain",
-          "pattern": "",
-          "target": [
-            "TargetMain"
-          ]
-        },
-        {
-          "name": "Tab",
-          "pattern": "tab/{tabKey}",
-          "target": ["TargetMain"]
-        },
-        {
-          "name": "ProductDetailPage",
-          "pattern": "Product/{ProductID}",
-          "target": ["ProductDetailPage"]
-        }
-      ],
+				{
+					"pattern": "",
+					"name": "RouteMain",
+					"target": "TargetMain"
+				},
+				{
+					"pattern": "Orders/{objectId}/:?query:",
+					"name": "object",
+					"target": [
+						"TargetMain",
+						"object"
+					]
+				}
+			],
       "targets": {
         "TargetMain": {
-          "id": "Main",
-          "name": "Main"
-        },
-        "ProductDetailPage": {
-          "id": "Product",
-          "name": "Product"
-        }
+					"name": "Main",
+					"level": 1,
+					"id": "Main"
+				},
+				"object": {
+					"name": "Details",
+					"id": "details",
+					"level": 1,
+					"controlAggregation": "midColumnPages"
+				}
       }
     },
     "rootView": {

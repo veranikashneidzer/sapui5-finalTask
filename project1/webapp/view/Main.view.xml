@@ -60,7 +60,10 @@
 									style: 'short',
 									pattern: 'dd/MM/yyyy'
 								}
-							}">
+							}"
+							type="Active"
+							key="{DataV2>OrderID}"
+							press=".onSelectOrder">
 							<firstStatus>
 								<ObjectStatus
 									core:require="{

@@ -1,8 +1,21 @@
 <mvc:View controllerName="project1.controller.App"
     displayBlock="true"
     xmlns:mvc="sap.ui.core.mvc"
+    xmlns:f="sap.f"
     xmlns="sap.m">
     <App id="app">
-        
-    </App>
+      <f:FlexibleColumnLayout
+        id="layout"
+        layout="{oAppModel>/layout}"
+        backgroundDesign="Translucent">
+          <f:beginColumnPages>
+            <mvc:XMLView id="beginView" viewName="project1.view.Main"/>
+          </f:beginColumnPages>
+          <f:midColumnPages>
+            <mvc:XMLView id="detailView" viewName="project1.view.Details"/>
+          </f:midColumnPages>
+          <f:endColumnPages>
+          </f:endColumnPages>
+      </f:FlexibleColumnLayout>
+	</App>
 </mvc:View>

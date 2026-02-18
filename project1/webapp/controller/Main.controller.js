@@ -5,14 +5,16 @@ sap.ui.define([
   "sap/ui/model/Filter",
   "sap/ui/model/FilterOperator",
   "sap/ui/model/Sorter",
-  "sap/ui/core/format/DateFormat"
+  "sap/ui/core/format/DateFormat",
+  "sap/ui/Device",
 ], (BaseController,
   JSONModel,
   ODataV2ModelTab,
   Filter,
   FilterOperator,
   Sorter,
-  DateFormat) => {
+  DateFormat,
+  Device) => {
   "use strict";
 
   return BaseController.extend("project1.controller.Main", Object.assign({}, ODataV2ModelTab, {
@@ -125,8 +127,24 @@ sap.ui.define([
       }
 
       this.onSearchOrders(oEvent);
-    }
-  },
+    },
 
-  ))
+    onSelectOrder(oEvent) {
+      const oList = this.byId("listOfOrders");
+      const oBinding = oList.getBinding("items");
+      const oItem = oEvent.getSource();
+      const bIsSelected = oEvent.getParameter("selected");
+
+      if (!(oItem.getMode() === "MultiSelect" && !bIsSelected)) {
+        const oItem = oEvent.getParameter("listItem") || oEvent.getSource();
+        const nListOrderId = oEvent.getSource().getId().split("-").pop();
+        const bIsReplace = !Device.system.phone;
+        
+        this.getView().getModel("oAppModel").setProperty("/layout", "TwoColumnsMidExpanded");
+        this.getOwnerComponent().getRouter().navTo("object", {
+          objectId : oBinding.getContextByIndex(nListOrderId).getObject().OrderID
+        }, bIsReplace);
+      }
+    }
+  }))
 });;
