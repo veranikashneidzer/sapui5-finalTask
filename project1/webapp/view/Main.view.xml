@@ -1,125 +1,104 @@
 <mvc:View controllerName="project1.controller.Main"
     xmlns:mvc="sap.ui.core.mvc"
 	xmlns:core="sap.ui.core"
+	xmlns:semantic="sap.f.semantic"
     xmlns="sap.m">
-    <Page id="page">
+    <semantic:SemanticPage id="page">
+		<semantic:titleHeading>
 		<Title
 			text="{= ${i18n>orders} + ' (' + ${configModel>/ordersCounter} + ')' }"
 			level="H2"/>
-		<List
-			id="listOfOrders"
-			width="auto"
-			items="{
-				path: 'DataV2>/Orders',
-				parameters: {expand: 'Customer'},
-				sorter: {
-					path: 'DataV2>OrderID',
-					descending: true
-				}
-			}"
-			updateFinished="onOrdersListUpdateFinished">
-			<headerToolbar>
-				<OverflowToolbar>
-					<SearchField
-						showRefreshButton="true"
-						tooltip="{i18n>search}"
-						width="100%"
-						search=".onSearchOrders">
-						<layoutData>
-							<OverflowToolbarLayoutData
-								minWidth="150px"
-								maxWidth="240px"
-								shrinkable="true"
-								priority="NeverOverflow"/>
-						</layoutData>
-					</SearchField>
-					<ToolbarSpacer />
-					<!-- <ComboBox
-						selectedKey="0"
-						selectionChange=".onSetSelectedGenre"
-						class="sapUiTinyMarginEnd"
-						items="{
-							path: 'booksModel>/genres'
-						}">
-						<core:Item key="{booksModel>key}" text="{booksModel>title}" />
-					</ComboBox>
-					<Button
-						text="{i18n>buttonDelete}"
-						class="sapUiTinyMarginEnd"
-						enabled="{= Boolean(${configModel>/productsSelectedItems}.length)}"
-						press=".onOpenProductsDeleteConfirmationDialog">
-					</Button>
-					<Button
-						text="{i18n>buttonAdd}"
-						press=".onOpenProductV2DataCreateDialog">
-					</Button> -->
-				</OverflowToolbar>
-			</headerToolbar>
-			<items>
-				<ObjectListItem
-					title="{DataV2>OrderID}"
-					type="Active"
-					number="87.50"
-					numberUnit="EUR">
-					<firstStatus>
-						<ObjectStatus
-							text="Available"
-							state="Success" />
-					</firstStatus>
-					<ObjectAttribute text="{DataV2>/CompanyName}" />
-					<ObjectAttribute text="145 x 140 x 360 cm" />
-					<markers>
-						<ObjectMarker type="Favorite" />
-						<ObjectMarker type="Flagged" />
-					</markers>
-				</ObjectListItem>
-				<ObjectListItem
-						title="{= ${i18n>order} + ' ' + ${DataV2>OrderID} }"
-						number="{
-							path: 'DataV2>OrderDate',
-							type: 'sap.ui.model.type.Date',
-							formatOptions: {
-								style: 'short',
-								pattern: 'dd/MM/yyyy'
-							}
-						}">
-						<firstStatus>
-							<ObjectStatus
-								core:require="{
-									Formatter: 'project1/model/formatter'
-								}"
-								state="{
-									parts: [
-										{path: 'DataV2>RequiredDate'},
-										{path: 'DataV2>ShippedDate'},
-										{path: 'DataV2>OrderID'}
-									],
-									formatter:'Formatter.getDeliveryState'
-								}"
-								text="{
-									parts: [
-										{path: 'DataV2>RequiredDate'},
-										{path: 'DataV2>ShippedDate'}
-									],
-									formatter:'Formatter.getDeliveryText.bind($controller)'
-								}"/>
+		</semantic:titleHeading>
+		<semantic:content>
+			<List
+				id="listOfOrders"
+				width="auto"
+				items="{
+					path: 'DataV2>/Orders',
+					parameters: {expand: 'Customer'},
+					sorter: {
+						path: 'DataV2>OrderID',
+						descending: true
+					}
+				}"
+				updateFinished="onOrdersListUpdateFinished">
+				<headerToolbar>
+					<OverflowToolbar>
+						<SearchField
+							showRefreshButton="true"
+							tooltip="{i18n>search}"
+							width="100%"
+							search=".onSearchOrders">
+							<layoutData>
+								<OverflowToolbarLayoutData
+									minWidth="150px"
+									maxWidth="240px"
+									shrinkable="true"
+									priority="NeverOverflow"/>
+							</layoutData>
+						</SearchField>
+						<ToolbarSpacer />
+						<Button
+							id="filterButton"
+							press=".onOpenViewSettings"
+							icon="sap-icon://filter"
+							type="Transparent"/>
+						<Button
+							id="groupButton"
+							press=".onOpenViewSettings"
+							icon="sap-icon://group-2"
+							type="Transparent"/>
+					</OverflowToolbar>
+				</headerToolbar>
+				<items>
+					<ObjectListItem
+							title="{= ${i18n>order} + ' ' + ${DataV2>OrderID} }"
+							number="{
+								path: 'DataV2>OrderDate',
+								type: 'sap.ui.model.type.Date',
+								formatOptions: {
+									style: 'short',
+									pattern: 'dd/MM/yyyy'
+								}
+							}">
+							<firstStatus>
+								<ObjectStatus
+									core:require="{
+										Formatter: 'project1/model/formatter'
+									}"
+									state="{
+										parts: [
+											{path: 'DataV2>RequiredDate'},
+											{path: 'DataV2>ShippedDate'},
+											{path: 'DataV2>OrderID'}
+										],
+										formatter:'Formatter.getDeliveryState'
+									}"
+									text="{
+										parts: [
+											{path: 'DataV2>RequiredDate'},
+											{path: 'DataV2>ShippedDate'}
+										],
+										formatter:'Formatter.getDeliveryText.bind($controller)'
+									}"/>
 
-						</firstStatus>
-						<attributes>
-							<ObjectAttribute text="{DataV2>CustomerName}" />
-							<ObjectAttribute
-								title="{i18n>shipped}"
-								text="{
-									path: 'DataV2>ShippedDate',
-									type: 'sap.ui.model.type.Date',
-									formatOptions: {
-										style: 'medium',
-										pattern: 'dd MMM yyyy'
-									}
-								}" />
-						</attributes>
-					</ObjectListItem>
-			</items>
-		</List>
-    </Page>
+							</firstStatus>
+							<attributes>
+								<ObjectAttribute text="{DataV2>CustomerName}" />
+								<ObjectAttribute
+									title="{i18n>shipped}"
+									text="{
+										path: 'DataV2>ShippedDate',
+										type: 'sap.ui.model.type.Date',
+										formatOptions: {
+											style: 'medium',
+											pattern: 'dd MMM yyyy'
+										}
+									}" />
+							</attributes>
+						</ObjectListItem>
+				</items>
+			</List>
+		</semantic:content>
+    </semantic:SemanticPage>
 </mvc:View>
