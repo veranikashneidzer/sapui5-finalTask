@@ -74,7 +74,7 @@ sap.ui.define([
       const sQuery = oEvent.getSource().getValue();
       const oBinding = this.byId("listOfOrders").getBinding("items");
       const aFilters = sQuery ? [
-        new Filter("OrderID", FilterOperator.Contains, sQuery)
+        new Filter("CustomerName", FilterOperator.Contains, sQuery)
       ] : [];
 
       oBinding.filter(aFilters);
@@ -123,6 +123,8 @@ sap.ui.define([
       } else {
         oBinding.sort([]);
       }
+
+      this.onSearchOrders(oEvent);
     }
   },
 
