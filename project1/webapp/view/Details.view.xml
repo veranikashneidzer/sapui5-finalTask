@@ -1,11 +1,182 @@
 <mvc:View
 	controllerName="project1.controller.Details"
 	xmlns="sap.m"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:core="sap.ui.core"
 	xmlns:semantic="sap.f.semantic"
 	xmlns:mvc="sap.ui.core.mvc"
-	xmlns:core="sap.ui.core"
 	xmlns:l="sap.ui.layout">
-	<semantic:SemanticPage id="page">
-		
+	<semantic:SemanticPage
+		id="detailPage"
+		core:require="{
+			Formatter: 'project1/model/formatter'
+		}">
+		<semantic:titleHeading>
+			<Title
+                id="orderTitle"
+				text="Order {DataV2>OrderID}"/>
+		</semantic:titleHeading>
+		<semantic:headerContent>
+			<l:HorizontalLayout>
+				<l:VerticalLayout class="sapUiMediumMarginEnd">
+					<ObjectAttribute
+						title="{i18n>customer}"
+						text="{DataV2>CustomerName}"/>
+					<ObjectAttribute
+						title="{i18n>ordered}"
+						text="{
+							path: 'DataV2>OrderDate',
+							type: 'sap.ui.model.type.Date',
+							formatOptions: { style: 'medium', pattern: 'dd MMM yyyy' }
+						}"/>
+					<ObjectAttribute
+						title="{i18n>shipped}"
+						text="{= ${DataV2>ShippedDate} ?
+								${
+									path: 'DataV2>ShippedDate',
+									type: 'sap.ui.model.type.Date',
+									formatOptions: { style: 'medium', pattern: 'dd MMM yyyy' }
+								}
+							:${i18n>notYetShipped} }"/>
+				</l:VerticalLayout>
+				<l:VerticalLayout>
+					<Label text="{i18n>price}"/>
+					<ObjectNumber
+						number="{
+							parts: [
+								{path:'oDetailConfigModel>/totalAmount'},
+								{path:'oDetailConfigModel>/currency'}
+							],
+							type: 'sap.ui.model.type.Currency',
+							formatOptions: {
+								showMeasure: false
+							}
+						}"
+						unit="{oDetailConfigModel>/currency}"/>
+				</l:VerticalLayout>
+			</l:HorizontalLayout>
+		</semantic:headerContent>
+		<semantic:content>
+			<l:VerticalLayout>
+				<IconTabBar
+					headerBackgroundDesign="Transparent">
+					<items>
+						<IconTabFilter
+							icon="sap-icon://shipping-status"
+							key="shipping">
+							<VBox>
+								<f:SimpleForm
+									editable="false"
+									layout="ResponsiveGridLayout"
+									title="{i18n>shippingAddress}">
+									<f:content>
+										<Label text="{i18n>name}" />
+										<Text text="{DataV2>ShipName}" />
+										<Label text="{i18n>street}" />
+										<Text text="{DataV2>ShipAddress}" />
+										<Label text="{i18n>city}" />
+										<Text text="{DataV2>ShipPostalCode} {DataV2>ShipCity}" />
+										<Label text="{i18n>region}" />
+										<Text text="{DataV2>ShipRegion}" />
+										<Label text="{i18n>country}" />
+										<Text text="{DataV2>ShipCountry}" />
+									</f:content>
+								</f:SimpleForm>
+							</VBox>
+						</IconTabFilter>
+						<IconTabFilter
+							icon="sap-icon://employee"
+							key="processor">
+							<VBox>
+								<f:SimpleForm
+									editable="false"
+									layout="ResponsiveGridLayout"
+									title="{i18n>processorInformation}"
+									columnsL="2"
+									columnsM="2">
+									<f:content>
+										<core:Title text="{i18n>details}"/>
+										<Label text="{i18n>name}" />
+										<Text text="{DataV2>Employee/FirstName} {DataV2>Employee/LastName}" />
+										<Label text="{i18n>employeeID}" />
+										<Text text="{DataV2>Employee/EmployeeID}" />
+										<Label text="{i18n>jobTitle}" />
+										<Text text="{DataV2>Employee/Title}" />
+										<Label text="{i18n>phone}" />
+										<Link text="{DataV2>Employee/HomePhone}" />
+										<core:Title text="{i18n>picture}" />
+										<Image
+											src="{DataV2>Employee/Photo}"
+											width="50%"
+											height="50%" />
+									</f:content>
+								</f:SimpleForm>
+							</VBox>
+						</IconTabFilter>
+					</items>
+				</IconTabBar>
+				<Table
+					id="lineItemsList"
+					items="{DataV2>Order_Details}"
+					updateFinished=".onListUpdateFinished">
+					<headerToolbar>
+						<Toolbar id="lineItemsToolbar">
+							<Title
+                                text="{= ${i18n>lineItems} + ' (' + ${oDetailConfigModel>/listItemsCount} + ')' }"/>
+						</Toolbar>
+					</headerToolbar>
+					<columns>
+						<Column>
+							<Text text="{i18n>product}"/>
+						</Column>
+						<Column
+							minScreenWidth="Tablet"
+							demandPopin="true"
+							hAlign="End">
+							<Text text="{i18n>unitPrice}"/>
+						</Column>
+						<Column
+							minScreenWidth="Tablet"
+							demandPopin="true"
+							hAlign="End">
+							<Text text="{i18n>quantity}"/>
+						</Column>
+						<Column
+							minScreenWidth="Tablet"
+							demandPopin="true"
+							hAlign="End">
+							<Text text="{i18n>total}"/>
+						</Column>
+					</columns>
+					<items>
+						<ColumnListItem>
+							<cells>
+								<ObjectIdentifier
+									title="{DataV2>Product/ProductName}"
+									text="{DataV2>ProductID}"/>
+								<ObjectNumber
+									number="{
+										path: 'DataV2>UnitPrice',
+										formatter: 'Formatter.getUnitPrice'
+									}"
+									unit="{oDetailConfigModel>/currency}"/>
+								<ObjectAttribute
+									text="{DataV2>Quantity}"/>
+								<ObjectNumber
+									number="{
+										parts:[
+											{path:'DataV2>Quantity'},
+											{path:'DataV2>UnitPrice'},
+											{path:'oDetailConfigModel>/currency'}
+										],
+										formatter: 'Formatter.getItemTotal'
+									}"
+									unit="{oDetailConfigModel>/currency}"/>
+							</cells>
+						</ColumnListItem>
+					</items>
+				</Table>
+			</l:VerticalLayout>
+		</semantic:content>
 	</semantic:SemanticPage>
 </mvc:View>

@@ -1,5 +1,6 @@
 sap.ui.define([
-], () => {
+	"sap/ui/model/type/Currency"
+], (Currency) => {
 	"use strict";
 
 	const _getDeliveryStatus = (dRequiredDate, dShippedDate) => {
@@ -36,6 +37,19 @@ sap.ui.define([
 				default:
 					return "Success";
 			}
+		},
+
+		getUnitPrice(sValue) {
+			if (!sValue) {
+				return "";
+			}
+			return parseFloat(sValue).toFixed(2);
+		},
+
+		getItemTotal: function (iQuantity, nPrice, sCurrency) {
+			var oCurrency = new Currency({showMeasure: false});
+			var fTotal = iQuantity * nPrice;
+			return oCurrency.formatValue([fTotal.toFixed(2), sCurrency], "string");
 		}
 	};
 });
