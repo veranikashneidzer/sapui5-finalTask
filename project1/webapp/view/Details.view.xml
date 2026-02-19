@@ -14,7 +14,7 @@
 		<semantic:titleHeading>
 			<Title
                 id="orderTitle"
-				text="Order {DataV2>OrderID}"/>
+				text="{= ${oDetailConfigModel>/isOrderCreation} ? ${i18n>addNewOrder} : 'Order ' + ${DataV2>OrderID}}"/>
 		</semantic:titleHeading>
 		<semantic:headerContent>
 			<l:HorizontalLayout>

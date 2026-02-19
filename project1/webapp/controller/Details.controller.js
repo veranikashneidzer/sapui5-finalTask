@@ -15,7 +15,8 @@ sap.ui.define([
         selectedTab: "",
         totalAmount: 0,
         listItemsCount: 0,
-        currency: "EUR"
+        currency: "EUR",
+        isOrderCreation: false
       });
 
       this.getView().setModel(oDetailConfigModel, "oDetailConfigModel");
@@ -29,11 +30,21 @@ sap.ui.define([
       const sObjectId = oArguments.objectId;
       const oQuery = oArguments["?query"];
 
-      this.getView().bindElement({
+      if (sObjectId === "newOrder") {
+        this.oDetailConfigModel.setProperty("/isOrderCreation", true);
+
+        const oNewOrderContext = this.oDataV2Model.createEntry("/Orders");
+        this.getView().bindElement({
+          path: oNewOrderContext.getPath(),
+          model: "DataV2",
+        });
+      } else {
+        this.getView().bindElement({
         path: `/Orders(${sObjectId})`,
         parameters: { expand: "Customer,Items,Items/Product,Employee" },
         model: "DataV2"
       });
+      }
     },
 
     onListUpdateFinished(oEvent) {

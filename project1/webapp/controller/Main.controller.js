@@ -144,6 +144,13 @@ sap.ui.define([
           objectId : oBinding.getContextByIndex(nListOrderId).getObject().OrderID
         }, bIsReplace);
       }
+    },
+
+    onAddOrder() {
+      this.getView().getModel("oAppModel").setProperty("/layout", "TwoColumnsMidExpanded");
+      this.getOwnerComponent().getRouter().navTo("object", {
+        objectId: "newOrder"
+      });
     }
   }))
 });;

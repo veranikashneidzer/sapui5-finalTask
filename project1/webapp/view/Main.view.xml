@@ -39,6 +39,11 @@
 						</SearchField>
 						<ToolbarSpacer />
 						<Button
+							id="addButton"
+							press=".onAddOrder"
+							icon="sap-icon://add"
+							type="Transparent"/>
+						<Button
 							id="filterButton"
 							press=".onOpenViewSettings"
 							icon="sap-icon://filter"
