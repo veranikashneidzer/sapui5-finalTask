@@ -193,6 +193,7 @@
 											visible="{= !${oDetailConfigModel>/isEditMode}}"/>
 										<Link
 											text="{DataV2>Employee/HomePhone}" 
+											press=".onPressPhone"
 											visible="{= !${oDetailConfigModel>/isEditMode}}"/>
 										<core:Title text="{i18n>picture}" />
 										<Image

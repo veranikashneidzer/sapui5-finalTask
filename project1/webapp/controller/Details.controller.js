@@ -169,6 +169,10 @@ sap.ui.define([
     onCloseOrder() {
       this.getView().getModel("oAppModel").setProperty("/layout", "OneColumn");
 			this.getOwnerComponent().getRouter().navTo("RouteMain");
+    },
+
+    onPressPhone(oEvent) {
+			mobileLibrary.URLHelper.triggerTel(oEvent.getSource().getText());
     }
   });
 });
