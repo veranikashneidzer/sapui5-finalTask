@@ -297,5 +297,19 @@
 				visible="{oDetailConfigModel>/isEditMode}"
 				press=".onSaveOrder"/>
 		</semantic:addAction>
+		<semantic:deleteAction>
+			<semantic:DeleteAction
+				press=".onDeleteOrder"/>
+		</semantic:deleteAction>
+		<semantic:sendEmailAction>
+			<semantic:SendEmailAction
+				id="shareEmail"
+				press=".onSendEmail"/>
+		</semantic:sendEmailAction>
+		<semantic:closeAction>
+			<semantic:CloseAction
+				id="closeColumn"
+				press=".onCloseOrder"/>
+		</semantic:closeAction>
 	</semantic:SemanticPage>
 </mvc:View>

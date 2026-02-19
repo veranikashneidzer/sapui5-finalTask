@@ -3,13 +3,15 @@ sap.ui.define([
   "sap/ui/model/json/JSONModel",
   "sap/m/MessageToast",
   "sap/m/MessageBox",
-  "project1/model/formatter"
+  "project1/model/formatter",
+  "sap/m/library"
 ], function (
   Controller,
 	JSONModel,
 	MessageToast,
 	MessageBox,
-	formatter
+	formatter,
+  mobileLibrary
 ) {
   "use strict";
 
@@ -125,6 +127,18 @@ sap.ui.define([
         ]
       });
       oList.addItem(oItem);
+    },
+
+    onDeleteOrder() {},
+
+    onSendEmail(oEvent) {
+      const oObject = oEvent.getSource().getBindingContext("DataV2").getObject();
+
+      mobileLibrary.URLHelper.triggerEmail(
+				null,
+				this.oBundle.getText("shareSendEmailObjectSubject", [oObject.OrderID]),
+				this.oBundle.getText("shareSendEmailObjectMessage", [oObject.OrderID, oObject.OrderID, location.href, oObject.ShipName, oObject.EmployeeID, oObject.CustomerID])
+			);
     },
   });
 });
