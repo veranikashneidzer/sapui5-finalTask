@@ -129,7 +129,32 @@ sap.ui.define([
       oList.addItem(oItem);
     },
 
-    onDeleteOrder() {},
+    onDeleteOrder() {
+      const oBundle = this.getView().getModel("i18n").getResourceBundle();
+
+      MessageBox.confirm(oBundle.getText("orderDeleteConfirmationDialogText"), {
+        actions: [MessageBox.Action.YES, MessageBox.Action.CLOSE],
+        onClose: (sAction) => {
+          if (sAction === MessageBox.Action.YES) {
+            this._onDeleteOrder();
+            this.onCloseOrder()
+          }
+        },
+      });
+    },
+
+    _onDeleteOrder() {
+      const sObjectId = this.getView().getBindingContext("DataV2").getObject().OrderID;
+      this.oDataV2Model.remove(`/Orders(${sObjectId})`);
+
+      const sSuccessMsg = this.oBundle.getText("deletionSuccessMessage");
+      const sErrorMsg = this.oBundle.getText("deletionErrorMessage");
+
+      this.oDataV2Model.submitChanges({
+        success: () => MessageToast.show(sSuccessMsg),
+        error: () => MessageBox.error(sErrorMsg),
+      });
+    },
 
     onSendEmail(oEvent) {
       const oObject = oEvent.getSource().getBindingContext("DataV2").getObject();
