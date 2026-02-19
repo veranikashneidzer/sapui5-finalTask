@@ -140,5 +140,10 @@ sap.ui.define([
 				this.oBundle.getText("shareSendEmailObjectMessage", [oObject.OrderID, oObject.OrderID, location.href, oObject.ShipName, oObject.EmployeeID, oObject.CustomerID])
 			);
     },
+
+    onCloseOrder() {
+      this.getView().getModel("oAppModel").setProperty("/layout", "OneColumn");
+			this.getOwnerComponent().getRouter().navTo("RouteMain");
+    }
   });
 });
