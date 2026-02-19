@@ -197,10 +197,12 @@
 											visible="{= !${oDetailConfigModel>/isEditMode}}"/>
 										<core:Title text="{i18n>picture}" />
 										<Image
-											src="{DataV2>Employee/Photo}"
+											src="{
+												path:'DataV2>Employee/Photo',
+												formatter: 'Formatter.formatEmployeeImage'
+											}"
 											width="50%"
 											height="50%" />
-										
 									</f:content>
 								</f:SimpleForm>
 							</VBox>

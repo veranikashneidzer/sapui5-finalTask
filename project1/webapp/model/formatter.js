@@ -50,6 +50,10 @@ sap.ui.define([
 			var oCurrency = new Currency({showMeasure: false});
 			var fTotal = iQuantity * nPrice || 0;
 			return oCurrency.formatValue([fTotal.toFixed(2), sCurrency], "string");
+		},
+
+		formatEmployeeImage(vData) {
+			return vData ? 'data:image/jpeg;base64,' + vData.substr(104) : "../images/Employee.png";
 		}
 	};
 });
