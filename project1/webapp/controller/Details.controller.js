@@ -1,9 +1,13 @@
 sap.ui.define([
   "sap/ui/core/mvc/Controller",
-  "sap/ui/model/json/JSONModel"
+  "sap/ui/model/json/JSONModel",
+  "sap/m/MessageToast",
+  "sap/m/MessageBox",
 ], function (
   Controller,
-  JSONModel
+  JSONModel,
+  MessageToast,
+  MessageBox
 ) {
   "use strict";
 
@@ -16,13 +20,15 @@ sap.ui.define([
         totalAmount: 0,
         listItemsCount: 0,
         currency: "EUR",
-        isOrderCreation: false
+        isOrderCreation: false,
+        isEditMode: false
       });
 
       this.getView().setModel(oDetailConfigModel, "oDetailConfigModel");
 
       this.oDataV2Model = this.getOwnerComponent().getModel("DataV2");
       this.oDetailConfigModel = this.getView().getModel("oDetailConfigModel");
+      this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
     },
 
     _onObjectMatched: function (oEvent) {
@@ -32,6 +38,7 @@ sap.ui.define([
 
       if (sObjectId === "newOrder") {
         this.oDetailConfigModel.setProperty("/isOrderCreation", true);
+        this.oDetailConfigModel.setProperty("/isEditMode", true);
 
         const oNewOrderContext = this.oDataV2Model.createEntry("/Orders");
         this.getView().bindElement({
@@ -39,11 +46,13 @@ sap.ui.define([
           model: "DataV2",
         });
       } else {
+        this.oDetailConfigModel.setProperty("/isOrderCreation", false);
+        this.oDetailConfigModel.setProperty("/isEditMode", false);
         this.getView().bindElement({
-        path: `/Orders(${sObjectId})`,
-        parameters: { expand: "Customer,Items,Items/Product,Employee" },
-        model: "DataV2"
-      });
+          path: `/Orders(${sObjectId})`,
+          parameters: { expand: "Customer,Items,Items/Product,Employee" },
+          model: "DataV2"
+        });
       }
     },
 
@@ -55,6 +64,35 @@ sap.ui.define([
       }, 0);
       this.oDetailConfigModel.setProperty("/totalAmount", nOrderTotal);
       this.oDetailConfigModel.setProperty("/listItemsCount", aItemsContext.length);
+    },
+
+    onSaveOrder() {
+      if (this.oDetailConfigModel.getProperty("/isOrderCreation")) {
+        this._submitNewProduct();
+      }
+    },
+
+    _submitNewProduct() {
+      const bIsCreate = this.oDetailConfigModel.getProperty("/isOrderCreation");
+      const sSuccessMsg = this.oBundle.getText(bIsCreate ? "createSuccessMessage" : "editSuccessMessage");
+      const sErrorMsg = this.oBundle.getText(bIsCreate ? "createErrorMessage" : "editErrorMessage");
+
+      try {
+        this.oDataV2Model.submitChanges();
+        this.oDetailConfigModel.setProperty("/isEditMode", false);
+        this.oDetailConfigModel.setProperty("/isOrderCreation", false);
+
+        const oContext = this.getView().getBindingContext("DataV2");
+        const sId = oContext.getProperty("ID");
+        this.getOwnerComponent().getRouter().navTo("object", { objectId: sId });
+        MessageToast.show(sSuccessMsg);
+      } catch  {
+        MessageBox.error(sErrorMsg);
+      }
+    },
+
+    onAddLineItem() {
+      
     }
   });
 });

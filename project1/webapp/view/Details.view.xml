@@ -21,26 +21,54 @@
 				<l:VerticalLayout class="sapUiMediumMarginEnd">
 					<ObjectAttribute
 						title="{i18n>customer}"
+						visible="{= !${oDetailConfigModel>/isEditMode}}"
 						text="{DataV2>CustomerName}"/>
+					<Input
+						value="{ODataV2>CustomerName}" 
+						visible="{oDetailConfigModel>/isEditMode}" 
+						required="true"
+						placeholder="{i18n>customer}"/>
 					<ObjectAttribute
 						title="{i18n>ordered}"
+						visible="{= !${oDetailConfigModel>/isEditMode}}"
 						text="{
 							path: 'DataV2>OrderDate',
 							type: 'sap.ui.model.type.Date',
 							formatOptions: { style: 'medium', pattern: 'dd MMM yyyy' }
 						}"/>
+					<DatePicker
+						placeholder="{i18n>ordered}" 
+						visible="{oDetailConfigModel>/isEditMode}"
+						displayFormat="dd-MM-yyyy" 
+						valueFormat="yyyy-MM-dd" 
+						value="{
+							path: 'DataV2>OrderDate',
+							type: 'sap.ui.model.type.Date'
+						}"
+						required="true" 
+						/>
 					<ObjectAttribute
 						title="{i18n>shipped}"
-						text="{= ${DataV2>ShippedDate} ?
-								${
-									path: 'DataV2>ShippedDate',
-									type: 'sap.ui.model.type.Date',
-									formatOptions: { style: 'medium', pattern: 'dd MMM yyyy' }
-								}
-							:${i18n>notYetShipped} }"/>
+						visible="{= !${oDetailConfigModel>/isEditMode}}"
+						text="{path: 'DataV2>ShippedDate',
+							type: 'sap.ui.model.type.Date',
+							formatOptions: { style: 'medium', pattern: 'dd MMM yyyy' }}"/>
+					<DatePicker
+						placeholder="{i18n>shipped}" 
+						visible="{oDetailConfigModel>/isEditMode}"
+						displayFormat="dd-MM-yyyy" 
+						valueFormat="yyyy-MM-dd" 
+						value="{
+							path: 'DataV2>ShippedDate',
+							type: 'sap.ui.model.type.Date'
+						}"
+						required="true" 
+						/>
 				</l:VerticalLayout>
 				<l:VerticalLayout>
-					<Label text="{i18n>price}"/>
+					<Label
+						visible="{= !${oDetailConfigModel>/isEditMode}}"
+						text="{i18n>price}"/>
 					<ObjectNumber
 						number="{
 							parts: [
@@ -52,6 +80,7 @@
 								showMeasure: false
 							}
 						}"
+						visible="{= !${oDetailConfigModel>/isEditMode}}"
 						unit="{oDetailConfigModel>/currency}"/>
 				</l:VerticalLayout>
 			</l:HorizontalLayout>
@@ -71,15 +100,56 @@
 									title="{i18n>shippingAddress}">
 									<f:content>
 										<Label text="{i18n>name}" />
-										<Text text="{DataV2>ShipName}" />
+										<Text 
+											visible="{= !${oDetailConfigModel>/isEditMode}}"
+											text="{DataV2>ShipName}" />
+										<Input
+											value="{ODataV2>ShipName}" 
+											visible="{oDetailConfigModel>/isEditMode}" 
+											required="true"
+											placeholder="{i18n>name}"/>
 										<Label text="{i18n>street}" />
-										<Text text="{DataV2>ShipAddress}" />
-										<Label text="{i18n>city}" />
-										<Text text="{DataV2>ShipPostalCode} {DataV2>ShipCity}" />
-										<Label text="{i18n>region}" />
-										<Text text="{DataV2>ShipRegion}" />
+										<Text 
+											visible="{= !${oDetailConfigModel>/isEditMode}}"
+											text="{DataV2>ShipAddress}" />
+										<Input
+											value="{ODataV2>ShipAddress}" 
+											visible="{oDetailConfigModel>/isEditMode}" 
+											required="true"
+											placeholder="{i18n>street}"/>
+										<Label text="{i18n>cityAndCode}" />
+										<Text 
+											visible="{= !${oDetailConfigModel>/isEditMode}}"
+											text="{DataV2>ShipPostalCode} {DataV2>ShipCity}" />
+										<Input
+											value="{ODataV2>ShipCity}" 
+											visible="{oDetailConfigModel>/isEditMode}" 
+											required="true"
+											placeholder="{i18n>city}"/>
+										<Input
+											value="{ODataV2>ShipPostalCode}" 
+											visible="{oDetailConfigModel>/isEditMode}" 
+											required="true"
+											placeholder="{i18n>zipCode}"/>
+										<Label 
+										text="{i18n>region}" />
+										<Text 
+											visible="{= !${oDetailConfigModel>/isEditMode}}"
+											text="{DataV2>ShipRegion}" />
+										<Input
+											value="{ODataV2>ShipRegion}" 
+											visible="{oDetailConfigModel>/isEditMode}" 
+											required="true"
+											placeholder="{i18n>region}"/>
 										<Label text="{i18n>country}" />
-										<Text text="{DataV2>ShipCountry}" />
+										<Text
+											visible="{= !${oDetailConfigModel>/isEditMode}}"
+											text="{DataV2>ShipCountry}" />
+										<Input
+											value="{ODataV2>ShipCountry}" 
+											visible="{oDetailConfigModel>/isEditMode}" 
+											required="true"
+											placeholder="{i18n>country}"/>
 									</f:content>
 								</f:SimpleForm>
 							</VBox>
@@ -95,20 +165,24 @@
 									columnsL="2"
 									columnsM="2">
 									<f:content>
-										<core:Title text="{i18n>details}"/>
-										<Label text="{i18n>name}" />
-										<Text text="{DataV2>Employee/FirstName} {DataV2>Employee/LastName}" />
-										<Label text="{i18n>employeeID}" />
-										<Text text="{DataV2>Employee/EmployeeID}" />
-										<Label text="{i18n>jobTitle}" />
-										<Text text="{DataV2>Employee/Title}" />
-										<Label text="{i18n>phone}" />
-										<Link text="{DataV2>Employee/HomePhone}" />
+										<core:Title text="{i18n>details}" />
+										<Text 
+											visible="{oDetailConfigModel>/isOrderCreation}"
+											text="{i18n>employeeForNewOrder}" />
+										<Label text="{i18n>name}" visible="{= !${oDetailConfigModel>/isEditMode}}"/>
+										<Text text="{DataV2>Employee/FirstName} {DataV2>Employee/LastName}" visible="{= !${oDetailConfigModel>/isEditMode}}"/>
+										<Label text="{i18n>employeeID}" visible="{= !${oDetailConfigModel>/isEditMode}}"/>
+										<Text text="{DataV2>Employee/EmployeeID}" visible="{= !${oDetailConfigModel>/isEditMode}}"/>
+										<Label text="{i18n>jobTitle}" visible="{= !${oDetailConfigModel>/isEditMode}}"/>
+										<Text text="{DataV2>Employee/Title}" visible="{= !${oDetailConfigModel>/isEditMode}}"/>
+										<Label text="{i18n>phone}" visible="{= !${oDetailConfigModel>/isEditMode}}"/>
+										<Link text="{DataV2>Employee/HomePhone}" visible="{= !${oDetailConfigModel>/isEditMode}}"/>
 										<core:Title text="{i18n>picture}" />
 										<Image
 											src="{DataV2>Employee/Photo}"
 											width="50%"
 											height="50%" />
+										
 									</f:content>
 								</f:SimpleForm>
 							</VBox>
@@ -123,6 +197,12 @@
 						<Toolbar id="lineItemsToolbar">
 							<Title
                                 text="{= ${i18n>lineItems} + ' (' + ${oDetailConfigModel>/listItemsCount} + ')' }"/>
+								<ToolbarSpacer />
+								<Button
+									text="{i18n>buttonAdd}"
+									visible="{oDetailConfigModel>/isEditMode}" 
+									press=".onAddLineItem">
+								</Button>
 						</Toolbar>
 					</headerToolbar>
 					<columns>
@@ -178,5 +258,14 @@
 				</Table>
 			</l:VerticalLayout>
 		</semantic:content>
+		<!-- <semantic:saveAction>
+			<semantic:SaveAction
+				press=".onSaveOrder"/>
+		</semantic:saveAction> -->
+		<semantic:addAction>
+			<semantic:AddAction
+				visible="{oDetailConfigModel>/isEditMode}"
+				press=".onSaveOrder"/>
+		</semantic:addAction>
 	</semantic:SemanticPage>
 </mvc:View>
