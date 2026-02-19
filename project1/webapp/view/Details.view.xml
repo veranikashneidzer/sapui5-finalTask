@@ -8,6 +8,7 @@
 	xmlns:l="sap.ui.layout">
 	<semantic:SemanticPage
 		id="detailPage"
+		showFooter="{= ${oDetailConfigModel>/isEditMode} || ${oDetailConfigModel>/isOrderCreation} }"
 		core:require="{
 			Formatter: 'project1/model/formatter'
 		}">
@@ -24,7 +25,7 @@
 						visible="{= !${oDetailConfigModel>/isEditMode}}"
 						text="{DataV2>CustomerName}"/>
 					<Input
-						value="{ODataV2>CustomerName}" 
+						value="{DataV2>CustomerName}" 
 						visible="{oDetailConfigModel>/isEditMode}" 
 						required="true"
 						placeholder="{i18n>customer}"/>
@@ -104,7 +105,7 @@
 											visible="{= !${oDetailConfigModel>/isEditMode}}"
 											text="{DataV2>ShipName}" />
 										<Input
-											value="{ODataV2>ShipName}" 
+											value="{DataV2>ShipName}" 
 											visible="{oDetailConfigModel>/isEditMode}" 
 											required="true"
 											placeholder="{i18n>name}"/>
@@ -113,7 +114,7 @@
 											visible="{= !${oDetailConfigModel>/isEditMode}}"
 											text="{DataV2>ShipAddress}" />
 										<Input
-											value="{ODataV2>ShipAddress}" 
+											value="{DataV2>ShipAddress}" 
 											visible="{oDetailConfigModel>/isEditMode}" 
 											required="true"
 											placeholder="{i18n>street}"/>
@@ -122,12 +123,12 @@
 											visible="{= !${oDetailConfigModel>/isEditMode}}"
 											text="{DataV2>ShipPostalCode} {DataV2>ShipCity}" />
 										<Input
-											value="{ODataV2>ShipCity}" 
+											value="{DataV2>ShipCity}" 
 											visible="{oDetailConfigModel>/isEditMode}" 
 											required="true"
 											placeholder="{i18n>city}"/>
 										<Input
-											value="{ODataV2>ShipPostalCode}" 
+											value="{DataV2>ShipPostalCode}" 
 											visible="{oDetailConfigModel>/isEditMode}" 
 											required="true"
 											placeholder="{i18n>zipCode}"/>
@@ -137,7 +138,7 @@
 											visible="{= !${oDetailConfigModel>/isEditMode}}"
 											text="{DataV2>ShipRegion}" />
 										<Input
-											value="{ODataV2>ShipRegion}" 
+											value="{DataV2>ShipRegion}" 
 											visible="{oDetailConfigModel>/isEditMode}" 
 											required="true"
 											placeholder="{i18n>region}"/>
@@ -146,7 +147,7 @@
 											visible="{= !${oDetailConfigModel>/isEditMode}}"
 											text="{DataV2>ShipCountry}" />
 										<Input
-											value="{ODataV2>ShipCountry}" 
+											value="{DataV2>ShipCountry}" 
 											visible="{oDetailConfigModel>/isEditMode}" 
 											required="true"
 											placeholder="{i18n>country}"/>
@@ -169,6 +170,9 @@
 										<Text 
 											visible="{oDetailConfigModel>/isOrderCreation}"
 											text="{i18n>employeeForNewOrder}" />
+										<Text 
+											visible="{oDetailConfigModel>/isEditMode}"
+											text="{i18n>employeeForEditedOrder}" />
 										<Label
 											text="{i18n>name}" 
 											visible="{= !${oDetailConfigModel>/isEditMode}}"/>
@@ -212,6 +216,7 @@
 				<Table
 					id="lineItemsList"
 					items="{DataV2>Order_Details}"
+					class="sapUiMediumMarginBottom sapUiMediumMarginTop"
 					updateFinished=".onListUpdateFinished">
 					<headerToolbar>
 						<Toolbar id="lineItemsToolbar">
@@ -251,30 +256,39 @@
 					<items>
 						<ColumnListItem>
 							<cells>
-								<ObjectIdentifier
-									title="{DataV2>Product/ProductName}"
-									text="{DataV2>ProductID}"/>
-								<Input
-									value="{ODataV2>Product/ProductName}" 
-									visible="{oDetailConfigModel>/isEditMode}" 
-									required="true"/>
-								<ObjectNumber
-									number="{
-										path: 'DataV2>UnitPrice',
-										formatter: 'Formatter.getUnitPrice'
-									}"
-									unit="{oDetailConfigModel>/currency}"/>
-								<Input
-									type="Number"
-									value="{ODataV2>UnitPrice}" 
-									visible="{oDetailConfigModel>/isEditMode}" 
-									required="true"/>
-								<ObjectAttribute
-									text="{DataV2>Quantity}"/>
-								<Input
-									value="{ODataV2>Quantity}" 
-									visible="{oDetailConfigModel>/isEditMode}" 
-									required="true"/>
+								<VBox>
+									<ObjectIdentifier
+										title="{DataV2>Product/ProductName}"
+										visible="{= !${oDetailConfigModel>/isEditMode}}"
+										text="{DataV2>ProductID}"/>
+									<Input
+										value="{DataV2>Product/ProductName}" 
+										visible="{oDetailConfigModel>/isEditMode}" 
+										required="true"/>
+								</VBox>
+								<VBox>
+									<ObjectNumber
+										number="{
+											path: 'DataV2>UnitPrice',
+											formatter: 'Formatter.getUnitPrice'
+										}"
+										visible="{= !${oDetailConfigModel>/isEditMode}}"
+										unit="{oDetailConfigModel>/currency}"/>
+									<Input
+										type="Number"
+										value="{DataV2>UnitPrice}" 
+										visible="{oDetailConfigModel>/isEditMode}" 
+										required="true"/>
+								</VBox>
+								<VBox>
+									<ObjectAttribute
+										visible="{= !${oDetailConfigModel>/isEditMode}}"
+										text="{DataV2>Quantity}"/>
+									<Input
+										value="{DataV2>Quantity}" 
+										visible="{oDetailConfigModel>/isEditMode}" 
+										required="true"/>
+								</VBox>
 								<ObjectNumber
 									number="{
 										parts:[
@@ -284,6 +298,7 @@
 										],
 										formatter: 'Formatter.getItemTotal'
 									}"
+									visible="{= !${oDetailConfigModel>/isEditMode}}"
 									unit="{oDetailConfigModel>/currency}"/>
 							</cells>
 						</ColumnListItem>
@@ -291,19 +306,16 @@
 				</Table>
 			</l:VerticalLayout>
 		</semantic:content>
-		<!-- <semantic:saveAction>
-			<semantic:SaveAction
-				press=".onSaveOrder"/>
-		</semantic:saveAction> -->
-		<semantic:addAction>
-			<semantic:AddAction
-				visible="{oDetailConfigModel>/isEditMode}"
-				press=".onSaveOrder"/>
-		</semantic:addAction>
+
 		<semantic:deleteAction>
 			<semantic:DeleteAction
 				press=".onDeleteOrder"/>
 		</semantic:deleteAction>
+		<semantic:editAction>
+			<semantic:EditAction
+				visible="{= !${oDetailConfigModel>/isEditMode}}"
+				press=".onEditOrder"/>
+		</semantic:editAction>
 		<semantic:sendEmailAction>
 			<semantic:SendEmailAction
 				id="shareEmail"
@@ -314,5 +326,14 @@
 				id="closeColumn"
 				press=".onCloseOrder"/>
 		</semantic:closeAction>
+
+		<semantic:footerCustomActions>
+			<Button
+				text="Save"
+				press=".onSaveButtonPress"/>
+			<Button
+				text="Cancel"
+				press=".onCancelEdit"/>
+		</semantic:footerCustomActions>
 	</semantic:SemanticPage>
 </mvc:View>
