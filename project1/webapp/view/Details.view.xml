@@ -169,14 +169,31 @@
 										<Text 
 											visible="{oDetailConfigModel>/isOrderCreation}"
 											text="{i18n>employeeForNewOrder}" />
-										<Label text="{i18n>name}" visible="{= !${oDetailConfigModel>/isEditMode}}"/>
-										<Text text="{DataV2>Employee/FirstName} {DataV2>Employee/LastName}" visible="{= !${oDetailConfigModel>/isEditMode}}"/>
-										<Label text="{i18n>employeeID}" visible="{= !${oDetailConfigModel>/isEditMode}}"/>
-										<Text text="{DataV2>Employee/EmployeeID}" visible="{= !${oDetailConfigModel>/isEditMode}}"/>
-										<Label text="{i18n>jobTitle}" visible="{= !${oDetailConfigModel>/isEditMode}}"/>
-										<Text text="{DataV2>Employee/Title}" visible="{= !${oDetailConfigModel>/isEditMode}}"/>
-										<Label text="{i18n>phone}" visible="{= !${oDetailConfigModel>/isEditMode}}"/>
-										<Link text="{DataV2>Employee/HomePhone}" visible="{= !${oDetailConfigModel>/isEditMode}}"/>
+										<Label
+											text="{i18n>name}" 
+											visible="{= !${oDetailConfigModel>/isEditMode}}"/>
+										<Text
+											text="{DataV2>Employee/FirstName}
+											{DataV2>Employee/LastName}" 
+											visible="{= !${oDetailConfigModel>/isEditMode}}"/>
+										<Label
+											text="{i18n>employeeID}"
+											visible="{= !${oDetailConfigModel>/isEditMode}}"/>
+										<Text
+											text="{DataV2>Employee/EmployeeID}" 
+											visible="{= !${oDetailConfigModel>/isEditMode}}"/>
+										<Label
+											text="{i18n>jobTitle}" 
+											visible="{= !${oDetailConfigModel>/isEditMode}}"/>
+										<Text
+											text="{DataV2>Employee/Title}" 
+											visible="{= !${oDetailConfigModel>/isEditMode}}"/>
+										<Label
+											text="{i18n>phone}" 
+											visible="{= !${oDetailConfigModel>/isEditMode}}"/>
+										<Link
+											text="{DataV2>Employee/HomePhone}" 
+											visible="{= !${oDetailConfigModel>/isEditMode}}"/>
 										<core:Title text="{i18n>picture}" />
 										<Image
 											src="{DataV2>Employee/Photo}"
@@ -234,14 +251,27 @@
 								<ObjectIdentifier
 									title="{DataV2>Product/ProductName}"
 									text="{DataV2>ProductID}"/>
+								<Input
+									value="{ODataV2>Product/ProductName}" 
+									visible="{oDetailConfigModel>/isEditMode}" 
+									required="true"/>
 								<ObjectNumber
 									number="{
 										path: 'DataV2>UnitPrice',
 										formatter: 'Formatter.getUnitPrice'
 									}"
 									unit="{oDetailConfigModel>/currency}"/>
+								<Input
+									type="Number"
+									value="{ODataV2>UnitPrice}" 
+									visible="{oDetailConfigModel>/isEditMode}" 
+									required="true"/>
 								<ObjectAttribute
 									text="{DataV2>Quantity}"/>
+								<Input
+									value="{ODataV2>Quantity}" 
+									visible="{oDetailConfigModel>/isEditMode}" 
+									required="true"/>
 								<ObjectNumber
 									number="{
 										parts:[

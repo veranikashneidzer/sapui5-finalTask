@@ -48,7 +48,7 @@ sap.ui.define([
 
 		getItemTotal: function (iQuantity, nPrice, sCurrency) {
 			var oCurrency = new Currency({showMeasure: false});
-			var fTotal = iQuantity * nPrice;
+			var fTotal = iQuantity * nPrice || 0;
 			return oCurrency.formatValue([fTotal.toFixed(2), sCurrency], "string");
 		}
 	};

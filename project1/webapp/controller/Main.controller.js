@@ -1,7 +1,6 @@
 sap.ui.define([
   "project1/controller/BaseController",
   "sap/ui/model/json/JSONModel",
-  "./parts/ODataV2ModelTab",
   "sap/ui/model/Filter",
   "sap/ui/model/FilterOperator",
   "sap/ui/model/Sorter",
@@ -17,7 +16,7 @@ sap.ui.define([
   Device) => {
   "use strict";
 
-  return BaseController.extend("project1.controller.Main", Object.assign({}, ODataV2ModelTab, {
+  return BaseController.extend("project1.controller.Main", {
     onInit() {
       this.configModel = this.getConfigModel();
       this.oDataV2Model = this.getOwnerComponent().getModel("DataV2");
@@ -132,18 +131,12 @@ sap.ui.define([
     onSelectOrder(oEvent) {
       const oList = this.byId("listOfOrders");
       const oBinding = oList.getBinding("items");
-      const oItem = oEvent.getSource();
-      const bIsSelected = oEvent.getParameter("selected");
-
-      if (!(oItem.getMode() === "MultiSelect" && !bIsSelected)) {
-        const nListOrderId = oEvent.getSource().getId().split("-").pop();
-        const bIsReplace = !Device.system.phone;
+      const nListOrderId = oEvent.getSource().getId().split("-").pop();
         
-        this.getView().getModel("oAppModel").setProperty("/layout", "TwoColumnsMidExpanded");
-        this.getOwnerComponent().getRouter().navTo("object", {
-          objectId : oBinding.getContextByIndex(nListOrderId).getObject().OrderID
-        }, bIsReplace);
-      }
+      this.getView().getModel("oAppModel").setProperty("/layout", "TwoColumnsMidExpanded");
+      this.getOwnerComponent().getRouter().navTo("object", {
+        objectId : oBinding.getContextByIndex(nListOrderId).getObject().OrderID
+      });
     },
 
     onAddOrder() {
@@ -152,5 +145,5 @@ sap.ui.define([
         objectId: "newOrder"
       });
     }
-  }))
+  })
 });;

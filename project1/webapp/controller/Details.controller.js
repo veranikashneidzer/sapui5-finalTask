@@ -3,11 +3,13 @@ sap.ui.define([
   "sap/ui/model/json/JSONModel",
   "sap/m/MessageToast",
   "sap/m/MessageBox",
+  "project1/model/formatter"
 ], function (
   Controller,
-  JSONModel,
-  MessageToast,
-  MessageBox
+	JSONModel,
+	MessageToast,
+	MessageBox,
+	formatter
 ) {
   "use strict";
 
@@ -40,7 +42,7 @@ sap.ui.define([
         this.oDetailConfigModel.setProperty("/isOrderCreation", true);
         this.oDetailConfigModel.setProperty("/isEditMode", true);
 
-        const oNewOrderContext = this.oDataV2Model.createEntry("/Orders");
+        const oNewOrderContext = this.oDataV2Model.createEntry("/Orders", {});
         this.getView().bindElement({
           path: oNewOrderContext.getPath(),
           model: "DataV2",
@@ -50,7 +52,7 @@ sap.ui.define([
         this.oDetailConfigModel.setProperty("/isEditMode", false);
         this.getView().bindElement({
           path: `/Orders(${sObjectId})`,
-          parameters: { expand: "Customer,Items,Items/Product,Employee" },
+          parameters: { expand: "Employee,Order_Details,Order_Details/Product" },
           model: "DataV2"
         });
       }
@@ -83,7 +85,7 @@ sap.ui.define([
         this.oDetailConfigModel.setProperty("/isOrderCreation", false);
 
         const oContext = this.getView().getBindingContext("DataV2");
-        const sId = oContext.getProperty("ID");
+        const sId = oContext.getPath().split("'")[1].split("'")[0];
         this.getOwnerComponent().getRouter().navTo("object", { objectId: sId });
         MessageToast.show(sSuccessMsg);
       } catch  {
@@ -92,7 +94,37 @@ sap.ui.define([
     },
 
     onAddLineItem() {
-      
-    }
+      const oList = this.byId("lineItemsList");
+      const oContext = oList.getBinding("items").getContext();
+      const oItem = new sap.m.ColumnListItem({
+        cells: [
+          new sap.m.Input({
+            value: "{DataV2>Product/ProductName}",
+            visible: "{oDetailConfigModel>/isEditMode}",
+            required: true
+          }),
+          new sap.m.Input({
+            type: "Number",
+            value: "{ODataV2>UnitPrice}",
+            visible: "{oDetailConfigModel>/isEditMode}",
+            required: true
+          }),
+          new sap.m.Input({
+            value: "{DataV2>Quantity}",
+            visible: "{oDetailConfigModel>/isEditMode}",
+            required: true
+          }),
+          new sap.m.ObjectNumber({
+            number: formatter.getItemTotal(
+              oContext.getProperty("Quantity"),
+              oContext.getProperty("UnitPrice"),
+              this.oDetailConfigModel.getProperty("/currency")
+            ),
+            unit: "{oDetailConfigModel>/currency}"
+          }),
+        ]
+      });
+      oList.addItem(oItem);
+    },
   });
 });
