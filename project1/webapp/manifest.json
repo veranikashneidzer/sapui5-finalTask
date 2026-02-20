@@ -104,7 +104,7 @@
 					"target": "TargetMain"
 				},
 				{
-					"pattern": "Orders/{objectId}/:?query:",
+					"pattern": "Orders/{objectId}:?query:",
 					"name": "object",
 					"target": [
 						"TargetMain",

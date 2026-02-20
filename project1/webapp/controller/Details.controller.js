@@ -38,6 +38,7 @@ sap.ui.define([
     _onObjectMatched: function (oEvent) {
       const oArguments = oEvent.getParameter("arguments");
       const sObjectId = oArguments.objectId;
+      const sQuery = oArguments["?query"];
       this.getView().unbindElement("DataV2");
 
       if (sObjectId === "newOrder") {
@@ -53,16 +54,12 @@ sap.ui.define([
           model: "DataV2"
         });
       }
-    },
 
-    onListUpdateFinished(oEvent) {
-      const aItemsContext = oEvent.getSource().getBinding("items").getContexts();
-      const nOrderTotal = aItemsContext.reduce((fPreviousTotal, oCurrentContext) => {
-        const fItemTotal = oCurrentContext.getObject().Quantity * oCurrentContext.getObject().UnitPrice;
-        return fPreviousTotal + fItemTotal;
-      }, 0);
-      this.oDetailConfigModel.setProperty("/totalAmount", nOrderTotal);
-      this.oDetailConfigModel.setProperty("/listItemsCount", aItemsContext.length);
+      this.getView().getModel("oAppModel").setProperty("/layout", "TwoColumnsMidExpanded");
+
+      if (sQuery && sQuery.isEditMode) {
+        this.oDetailConfigModel.setProperty("/isEditMode", true);
+      }
     },
 
     onCancelEdit() {
@@ -72,6 +69,7 @@ sap.ui.define([
         this.oDataV2Model.resetChanges();
         this.oDetailConfigModel.setProperty("/isEditMode", false);
       }
+      this.getOwnerComponent().getRouter().navTo("object", { objectId: this.getView().getBindingContext("DataV2").getObject().OrderID });
     },
 
     _validateControl(oControl) {
@@ -123,7 +121,7 @@ sap.ui.define([
       try {
         const oContext = this.getView().getBindingContext("DataV2");
         this.oDataV2Model.submitChanges({
-          success: function() {
+          success: function () {
             this.oDetailConfigModel.setProperty("/isEditMode", false);
             this.oDetailConfigModel.setProperty("/isOrderCreation", false);
 
@@ -132,47 +130,13 @@ sap.ui.define([
             this.getOwnerComponent().getRouter().navTo("object", { objectId: oContext.getObject().OrderID });
             MessageToast.show(sSuccessMsg);
           }.bind(this),
-          error: function() {
+          error: function () {
             MessageBox.show(sErrorMsg);
           }.bind(this)
         });
       } catch (error) {
         MessageBox.error(sErrorMsg, error);
       }
-    },
-
-    onAddLineItem() {
-      const oList = this.byId("lineItemsList");
-      const oContext = oList.getBinding("items").getContext();
-      const oItem = new sap.m.ColumnListItem({
-        cells: [
-          new sap.m.Input({
-            value: "{DataV2>Product/ProductName}",
-            visible: "{oDetailConfigModel>/isEditMode}",
-            required: true
-          }),
-          new sap.m.Input({
-            type: "Number",
-            value: "{DataV2>UnitPrice}",
-            visible: "{oDetailConfigModel>/isEditMode}",
-            required: true
-          }),
-          new sap.m.Input({
-            value: "{DataV2>Quantity}",
-            visible: "{oDetailConfigModel>/isEditMode}",
-            required: true
-          }),
-          new sap.m.ObjectNumber({
-            number: formatter.getItemTotal(
-              oContext.getProperty("Quantity"),
-              oContext.getProperty("UnitPrice"),
-              this.oDetailConfigModel.getProperty("/currency")
-            ),
-            unit: "{oDetailConfigModel>/currency}"
-          }),
-        ]
-      });
-      oList.addItem(oItem);
     },
 
     onDeleteOrder() {
@@ -183,7 +147,6 @@ sap.ui.define([
         onClose: (sAction) => {
           if (sAction === MessageBox.Action.YES) {
             this._onDeleteOrder();
-            this.onCloseOrder()
           }
         },
       });
@@ -197,9 +160,23 @@ sap.ui.define([
       const sErrorMsg = this.oBundle.getText("deletionErrorMessage");
 
       this.oDataV2Model.submitChanges({
-        success: () => MessageToast.show(sSuccessMsg),
+        success: () => {
+          MessageToast.show(sSuccessMsg);
+          this.onCloseDetailsPage();
+        },
         error: () => MessageBox.error(sErrorMsg),
       });
+    },
+
+    onCloseOrder() {
+      this.onCloseDetailsPage();
+      this.oDataV2Model.resetChanges();
+    },
+
+    onCloseDetailsPage() {
+      this.oDetailConfigModel.setProperty("/isEditMode", false);
+      this.getView().getModel("oAppModel").setProperty("/layout", "OneColumn");
+      this.getOwnerComponent().getRouter().navTo("RouteMain");
     },
 
     onSendEmail(oEvent) {
@@ -212,19 +189,18 @@ sap.ui.define([
       );
     },
 
-    onCloseOrder() {
-      this.oDetailConfigModel.setProperty("/isEditMode", false);
-      this.oDataV2Model.resetChanges();
-      this.getView().getModel("oAppModel").setProperty("/layout", "OneColumn");
-      this.getOwnerComponent().getRouter().navTo("RouteMain");
-    },
-
     onPressPhone(oEvent) {
       mobileLibrary.URLHelper.triggerTel(oEvent.getSource().getText());
     },
 
-    onEditOrder() {
-      this.oDetailConfigModel.setProperty("/isEditMode", true);
+    onEditOrder(oEvent) {
+      const oOrderID = oEvent.getSource().getBindingContext("DataV2").getObject().OrderID;
+      this.getOwnerComponent().getRouter().navTo("object", {
+        objectId: oOrderID,
+        query: {
+          isEditMode: true
+        }
+      });
     }
   });
 });

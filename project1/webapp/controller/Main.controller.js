@@ -141,8 +141,9 @@ sap.ui.define([
 
     onAddOrder() {
       this.getView().getModel("oAppModel").setProperty("/layout", "TwoColumnsMidExpanded");
+
       this.getOwnerComponent().getRouter().navTo("object", {
-        objectId: "newOrder"
+        objectId: "newOrder",
       });
     }
   })
