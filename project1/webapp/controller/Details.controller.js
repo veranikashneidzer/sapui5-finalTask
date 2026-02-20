@@ -43,29 +43,13 @@ sap.ui.define([
       if (sObjectId === "newOrder") {
         this.oDetailConfigModel.setProperty("/isOrderCreation", true);
         this.oDetailConfigModel.setProperty("/isEditMode", true);
-
-        this.oDataV2Model.read("/Orders", {
-          success: function (oDataV2) {
-            const sortedOrders = oDataV2.results.sort((a, b) => b.OrderID - a.OrderID);
-            const iMaxOrderId = sortedOrders[0].OrderID;
-
-            const oContext = this.oDataV2Model.createEntry("/Orders", {
-              properties: {
-                OrderID: iMaxOrderId + 1,
-              }
-            });
-            this.getView().setBindingContext(oContext, "DataV2");
-          }.bind(this),
-          error: function () {
-            Log.error("Failed to read Orders for generating new OrderID");
-          }.bind(this)
-        });
+        const oContext = this.oDataV2Model.createEntry("/Orders");
+        this.getView().setBindingContext(oContext, "DataV2");
       } else {
         this.oDetailConfigModel.setProperty("/isOrderCreation", false);
         this.oDetailConfigModel.setProperty("/isEditMode", false);
         this.getView().bindElement({
           path: `/Orders(${sObjectId})`,
-          parameters: { expand: "Employee,Order_Details,Order_Details/Product" },
           model: "DataV2"
         });
       }
@@ -96,11 +80,9 @@ sap.ui.define([
       const sErrorMsg = this.oBundle.getText(bIsCreate ? "createErrorMessage" : "editErrorMessage");
 
       try {
+        const oContext = this.getView().getBindingContext("DataV2");
         this.oDataV2Model.submitChanges({
           success: function() {
-            // this.getView().getModel("oAppModel").setProperty("/layout", "OneColumn");
-            // this.getOwnerComponent().getRouter().navTo("RouteMain");
-
             this.oDetailConfigModel.setProperty("/isEditMode", false);
             this.oDetailConfigModel.setProperty("/isOrderCreation", false);
 
@@ -113,8 +95,8 @@ sap.ui.define([
             MessageBox.show(sErrorMsg);
           }.bind(this)
         });
-      } catch {
-        MessageBox.error(sErrorMsg);
+      } catch (error) {
+        MessageBox.error(sErrorMsg, error);
       }
     },
 
