@@ -74,7 +74,48 @@ sap.ui.define([
       }
     },
 
+    _validateControl(oControl) {
+      let isValid = false;
+
+      if (oControl.isA("sap.m.Input")) {
+        const inputValue = oControl.getValue();
+        isValid = oControl.getType() === "Number" ? Number(inputValue) && inputValue > 0 : !!(`${inputValue}`.length);
+        oControl.setValueState(isValid ? "None" : "Error");
+        return isValid;
+      } else if (oControl.isA("sap.m.DatePicker")) {
+        isValid = oControl.isValidValue() && !!oControl.getValue().length;
+        oControl.setValueState(isValid ? "None" : "Error");
+        return isValid;
+      } else {
+        return true;
+      }
+    },
+
+    onControlChanged(oEvent) {
+      const oControl = oEvent.getSource();
+      this._validateControl(oControl);
+    },
+
+    validateForm() {
+      const aControls = [...this.getView().byId("headerContent").getContent()[0].getContent(), ...this.getView().byId("shippingAddressForm").getContent()];
+      let isAllControlsValid = true;
+
+      aControls.forEach((oControl) => {
+        const isValid = this._validateControl(oControl);
+
+        if (!isValid) {
+          isAllControlsValid = false;
+        }
+      });
+
+      return isAllControlsValid;
+    },
+
     onSaveButtonPress() {
+      if (!this.validateForm()) {
+        return;
+      }
+
       const bIsCreate = this.oDetailConfigModel.getProperty("/isOrderCreation");
       const sSuccessMsg = this.oBundle.getText(bIsCreate ? "createSuccessMessage" : "editSuccessMessage");
       const sErrorMsg = this.oBundle.getText(bIsCreate ? "createErrorMessage" : "editErrorMessage");

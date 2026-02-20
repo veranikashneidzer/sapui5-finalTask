@@ -18,7 +18,7 @@
 				text="{= ${oDetailConfigModel>/isOrderCreation} ? ${i18n>addNewOrder} : 'Order ' + ${DataV2>OrderID}}"/>
 		</semantic:titleHeading>
 		<semantic:headerContent>
-			<l:HorizontalLayout>
+			<l:HorizontalLayout id="headerContent">
 				<l:VerticalLayout class="sapUiMediumMarginEnd">
 					<ObjectAttribute
 						title="{i18n>customer}"
@@ -28,6 +28,8 @@
 						value="{DataV2>CustomerName}" 
 						visible="{oDetailConfigModel>/isEditMode}" 
 						required="true"
+						valueStateText="{i18n>validationError}"
+						liveChange=".onControlChanged"
 						placeholder="{i18n>customer}"/>
 					<ObjectAttribute
 						title="{i18n>ordered}"
@@ -46,6 +48,8 @@
 							path: 'DataV2>OrderDate',
 							type: 'sap.ui.model.type.Date'
 						}"
+						valueStateText="{i18n>validationError}"
+						liveChange=".onControlChanged"
 						required="true" 
 						/>
 					<ObjectAttribute
@@ -63,6 +67,8 @@
 							path: 'DataV2>ShippedDate',
 							type: 'sap.ui.model.type.Date'
 						}"
+						valueStateText="{i18n>validationError}"
+						liveChange=".onControlChanged"
 						required="true" 
 						/>
 				</l:VerticalLayout>
@@ -97,6 +103,7 @@
 							<VBox>
 								<f:SimpleForm
 									editable="false"
+									id="shippingAddressForm"
 									layout="ResponsiveGridLayout"
 									title="{i18n>shippingAddress}">
 									<f:content>
@@ -108,6 +115,8 @@
 											value="{DataV2>ShipName}" 
 											visible="{oDetailConfigModel>/isEditMode}" 
 											required="true"
+											valueStateText="{i18n>validationError}"
+											liveChange=".onControlChanged"
 											placeholder="{i18n>name}"/>
 										<Label text="{i18n>street}" />
 										<Text 
@@ -117,6 +126,8 @@
 											value="{DataV2>ShipAddress}" 
 											visible="{oDetailConfigModel>/isEditMode}" 
 											required="true"
+											valueStateText="{i18n>validationError}"
+											liveChange=".onControlChanged"
 											placeholder="{i18n>street}"/>
 										<Label text="{i18n>cityAndCode}" />
 										<Text 
@@ -126,11 +137,15 @@
 											value="{DataV2>ShipCity}" 
 											visible="{oDetailConfigModel>/isEditMode}" 
 											required="true"
+											valueStateText="{i18n>validationError}"
+											liveChange=".onControlChanged"
 											placeholder="{i18n>city}"/>
 										<Input
 											value="{DataV2>ShipPostalCode}" 
 											visible="{oDetailConfigModel>/isEditMode}" 
 											required="true"
+											valueStateText="{i18n>validationError}"
+											liveChange=".onControlChanged"
 											placeholder="{i18n>zipCode}"/>
 										<Label 
 										text="{i18n>region}" />
@@ -141,6 +156,8 @@
 											value="{DataV2>ShipRegion}" 
 											visible="{oDetailConfigModel>/isEditMode}" 
 											required="true"
+											valueStateText="{i18n>validationError}"
+											liveChange=".onControlChanged"
 											placeholder="{i18n>region}"/>
 										<Label text="{i18n>country}" />
 										<Text
@@ -150,6 +167,8 @@
 											value="{DataV2>ShipCountry}" 
 											visible="{oDetailConfigModel>/isEditMode}" 
 											required="true"
+											valueStateText="{i18n>validationError}"
+											liveChange=".onControlChanged"
 											placeholder="{i18n>country}"/>
 									</f:content>
 								</f:SimpleForm>
