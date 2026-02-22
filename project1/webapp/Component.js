@@ -1,6 +1,6 @@
 sap.ui.define([
     "sap/ui/core/UIComponent",
-    "project1/model/models"
+    "project1/model/models",
 ], (UIComponent, models) => {
     "use strict";
 
@@ -9,7 +9,12 @@ sap.ui.define([
             manifest: "json",
             interfaces: [
                 "sap.ui.core.IAsyncContentCreation"
-            ]
+            ],
+            rootView: {
+                viewName: "project1.view.App",
+                type: "XML",
+                id: "app"
+            }
         },
 
         init() {

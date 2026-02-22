@@ -1,0 +1,267 @@
+<mvc:View
+	controllerName="project1.controller.Details"
+	xmlns="sap.m"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:core="sap.ui.core"
+	xmlns:semantic="sap.f.semantic"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:l="sap.ui.layout">
+	<semantic:SemanticPage
+		id="detailPage"
+		showFooter="{= ${oDetailConfigModel>/isEditMode} || ${oDetailConfigModel>/isOrderCreation} }"
+		core:require="{
+			Formatter: 'project1/model/formatter'
+		}">
+		<semantic:titleHeading>
+			<Title
+                id="orderTitle"
+				text="{= ${oDetailConfigModel>/isOrderCreation} ? ${i18n>addNewOrder} : 'Order ' + ${DataV2>OrderID}}"/>
+		</semantic:titleHeading>
+		<semantic:headerContent>
+			<l:HorizontalLayout id="headerContent">
+				<l:VerticalLayout class="sapUiMediumMarginEnd">
+					<ObjectAttribute
+						title="{i18n>customer}"
+						visible="{= !${oDetailConfigModel>/isEditMode}}"
+						text="{DataV2>CustomerName}"/>
+					<Input
+						value="{DataV2>CustomerName}" 
+						visible="{oDetailConfigModel>/isEditMode}" 
+						required="true"
+						valueStateText="{i18n>validationError}"
+						liveChange=".onControlChanged"
+						placeholder="{i18n>customer}"/>
+					<ObjectAttribute
+						title="{i18n>ordered}"
+						visible="{= !${oDetailConfigModel>/isEditMode}}"
+						text="{
+							path: 'DataV2>OrderDate',
+							type: 'sap.ui.model.type.Date',
+							formatOptions: { style: 'medium', pattern: 'dd MMM yyyy' }
+						}"/>
+					<DatePicker
+						placeholder="{i18n>ordered}" 
+						visible="{oDetailConfigModel>/isEditMode}"
+						displayFormat="dd-MM-yyyy" 
+						valueFormat="yyyy-MM-dd" 
+						value="{
+							path: 'DataV2>OrderDate',
+							type: 'sap.ui.model.type.Date'
+						}"
+						valueStateText="{i18n>validationError}"
+						liveChange=".onControlChanged"
+						required="true" 
+						/>
+					<ObjectAttribute
+						title="{i18n>shipped}"
+						visible="{= !${oDetailConfigModel>/isEditMode}}"
+						text="{path: 'DataV2>ShippedDate',
+							type: 'sap.ui.model.type.Date',
+							formatOptions: { style: 'medium', pattern: 'dd MMM yyyy' }}"/>
+					<DatePicker
+						placeholder="{i18n>shipped}" 
+						visible="{oDetailConfigModel>/isEditMode}"
+						displayFormat="dd-MM-yyyy" 
+						valueFormat="yyyy-MM-dd" 
+						value="{
+							path: 'DataV2>ShippedDate',
+							type: 'sap.ui.model.type.Date'
+						}"
+						valueStateText="{i18n>validationError}"
+						liveChange=".onControlChanged"
+						required="true" 
+						/>
+				</l:VerticalLayout>
+				<l:VerticalLayout>
+					<Label
+						visible="{= !${oDetailConfigModel>/isEditMode}}"
+						text="{i18n>price}"/>
+					<ObjectNumber
+						number="{
+							parts: [
+								{path:'oDetailConfigModel>/totalAmount'},
+								{path:'oDetailConfigModel>/currency'}
+							],
+							type: 'sap.ui.model.type.Currency',
+							formatOptions: {
+								showMeasure: false
+							}
+						}"
+						visible="{= !${oDetailConfigModel>/isEditMode}}"
+						unit="{oDetailConfigModel>/currency}"/>
+				</l:VerticalLayout>
+			</l:HorizontalLayout>
+		</semantic:headerContent>
+		<semantic:content>
+			<l:VerticalLayout>
+				<IconTabBar
+					headerBackgroundDesign="Transparent">
+					<items>
+						<IconTabFilter
+							icon="sap-icon://shipping-status"
+							key="shipping">
+							<VBox>
+								<f:SimpleForm
+									editable="false"
+									id="shippingAddressForm"
+									layout="ResponsiveGridLayout"
+									title="{i18n>shippingAddress}">
+									<f:content>
+										<Label text="{i18n>name}" />
+										<Text 
+											visible="{= !${oDetailConfigModel>/isEditMode}}"
+											text="{DataV2>ShipName}" />
+										<Input
+											value="{DataV2>ShipName}" 
+											visible="{oDetailConfigModel>/isEditMode}" 
+											required="true"
+											valueStateText="{i18n>validationError}"
+											liveChange=".onControlChanged"
+											placeholder="{i18n>name}"/>
+										<Label text="{i18n>street}" />
+										<Text 
+											visible="{= !${oDetailConfigModel>/isEditMode}}"
+											text="{DataV2>ShipAddress}" />
+										<Input
+											value="{DataV2>ShipAddress}" 
+											visible="{oDetailConfigModel>/isEditMode}" 
+											required="true"
+											valueStateText="{i18n>validationError}"
+											liveChange=".onControlChanged"
+											placeholder="{i18n>street}"/>
+										<Label text="{i18n>cityAndCode}" />
+										<Text 
+											visible="{= !${oDetailConfigModel>/isEditMode}}"
+											text="{DataV2>ShipPostalCode} {DataV2>ShipCity}" />
+										<Input
+											value="{DataV2>ShipCity}" 
+											visible="{oDetailConfigModel>/isEditMode}" 
+											required="true"
+											valueStateText="{i18n>validationError}"
+											liveChange=".onControlChanged"
+											placeholder="{i18n>city}"/>
+										<Input
+											value="{DataV2>ShipPostalCode}" 
+											visible="{oDetailConfigModel>/isEditMode}" 
+											required="true"
+											valueStateText="{i18n>validationError}"
+											liveChange=".onControlChanged"
+											placeholder="{i18n>zipCode}"/>
+										<Label 
+										text="{i18n>region}" />
+										<Text 
+											visible="{= !${oDetailConfigModel>/isEditMode}}"
+											text="{DataV2>ShipRegion}" />
+										<Input
+											value="{DataV2>ShipRegion}" 
+											visible="{oDetailConfigModel>/isEditMode}" 
+											required="true"
+											valueStateText="{i18n>validationError}"
+											liveChange=".onControlChanged"
+											placeholder="{i18n>region}"/>
+										<Label text="{i18n>country}" />
+										<Text
+											visible="{= !${oDetailConfigModel>/isEditMode}}"
+											text="{DataV2>ShipCountry}" />
+										<Input
+											value="{DataV2>ShipCountry}" 
+											visible="{oDetailConfigModel>/isEditMode}" 
+											required="true"
+											valueStateText="{i18n>validationError}"
+											liveChange=".onControlChanged"
+											placeholder="{i18n>country}"/>
+									</f:content>
+								</f:SimpleForm>
+							</VBox>
+						</IconTabFilter>
+						<IconTabFilter
+							icon="sap-icon://employee"
+							key="processor">
+							<VBox>
+								<f:SimpleForm
+									editable="false"
+									layout="ResponsiveGridLayout"
+									title="{i18n>processorInformation}"
+									columnsL="2"
+									columnsM="2">
+									<f:content>
+										<core:Title text="{i18n>details}" />
+										<Text 
+											visible="{oDetailConfigModel>/isOrderCreation}"
+											text="{i18n>employeeForNewOrder}" />
+										<Text 
+											visible="{oDetailConfigModel>/isEditMode}"
+											text="{i18n>employeeForEditedOrder}" />
+										<Label
+											text="{i18n>name}" 
+											visible="{= !${oDetailConfigModel>/isEditMode}}"/>
+										<Text
+											text="{DataV2>Employee/FirstName}
+											{DataV2>Employee/LastName}" 
+											visible="{= !${oDetailConfigModel>/isEditMode}}"/>
+										<Label
+											text="{i18n>employeeID}"
+											visible="{= !${oDetailConfigModel>/isEditMode}}"/>
+										<Text
+											text="{DataV2>Employee/EmployeeID}" 
+											visible="{= !${oDetailConfigModel>/isEditMode}}"/>
+										<Label
+											text="{i18n>jobTitle}" 
+											visible="{= !${oDetailConfigModel>/isEditMode}}"/>
+										<Text
+											text="{DataV2>Employee/Title}" 
+											visible="{= !${oDetailConfigModel>/isEditMode}}"/>
+										<Label
+											text="{i18n>phone}" 
+											visible="{= !${oDetailConfigModel>/isEditMode}}"/>
+										<Link
+											text="{DataV2>Employee/HomePhone}" 
+											press=".onPressPhone"
+											visible="{= !${oDetailConfigModel>/isEditMode}}"/>
+										<core:Title text="{i18n>picture}" />
+										<Image
+											src="{
+												path:'DataV2>Employee/Photo',
+												formatter: 'Formatter.formatEmployeeImage'
+											}"
+											width="50%"
+											height="50%" />
+									</f:content>
+								</f:SimpleForm>
+							</VBox>
+						</IconTabFilter>
+					</items>
+				</IconTabBar>
+			</l:VerticalLayout>
+		</semantic:content>
+
+		<semantic:deleteAction>
+			<semantic:DeleteAction
+				press=".onDeleteOrder"/>
+		</semantic:deleteAction>
+		<semantic:editAction>
+			<semantic:EditAction
+				visible="{= !${oDetailConfigModel>/isEditMode}}"
+				press=".onEditOrder"/>
+		</semantic:editAction>
+		<semantic:sendEmailAction>
+			<semantic:SendEmailAction
+				id="shareEmail"
+				press=".onSendEmail"/>
+		</semantic:sendEmailAction>
+		<semantic:closeAction>
+			<semantic:CloseAction
+				id="closeColumn"
+				press=".onCloseOrder"/>
+		</semantic:closeAction>
+
+		<semantic:footerCustomActions>
+			<Button
+				text="Save"
+				press=".onSaveButtonPress"/>
+			<Button
+				text="Cancel"
+				press=".onCancelEdit"/>
+		</semantic:footerCustomActions>
+	</semantic:SemanticPage>
+</mvc:View>
