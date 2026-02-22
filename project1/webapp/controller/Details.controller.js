@@ -124,8 +124,6 @@ sap.ui.define([
           success: function () {
             this.oDetailConfigModel.setProperty("/isEditMode", false);
             this.oDetailConfigModel.setProperty("/isOrderCreation", false);
-
-            this.oDataV2Model.refresh(true);
             const oContext = this.getView().getBindingContext("DataV2");
             this.getOwnerComponent().getRouter().navTo("object", { objectId: oContext.getObject().OrderID });
             MessageToast.show(sSuccessMsg);
@@ -135,7 +133,7 @@ sap.ui.define([
           }.bind(this)
         });
       } catch (error) {
-        MessageBox.error(sErrorMsg, error);
+        Log.error(bIsCreate ? "Can not create an order" : "can not update the order", error);
       }
     },
 
